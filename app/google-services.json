@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "930689154302",
+    "project_id": "student-portal-ice",
+    "storage_bucket": "student-portal-ice.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:930689154302:android:f408a98ee887bd322939af",
+        "android_client_info": {
+          "package_name": "com.example.studentportal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "930689154302-qgcg02vv5c71akj38euut14ji7h8npm9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDj5PiINFUd-epqvDY_kHvFJociVr5Bwrw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "930689154302-qgcg02vv5c71akj38euut14ji7h8npm9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
