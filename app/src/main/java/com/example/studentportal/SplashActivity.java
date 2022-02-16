@@ -2,13 +2,16 @@ package com.example.studentportal;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
+@SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
 
     @Override
@@ -31,6 +34,7 @@ public class SplashActivity extends AppCompatActivity {
 
                     finish();
                 } catch (Exception e) {
+                    Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         };

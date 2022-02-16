@@ -11,4 +11,6 @@
     <color name="hint">#1B070606</color>
     <color name="button">#FF8C00</color>
     <color name="text_field">#E3E3E3</color>
+    <color name="red">#ff0000</color>
+    <color name="resent_mail">#330F09</color>
 </resources>

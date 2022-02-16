@@ -60,13 +60,24 @@
         android:background="@drawable/rounded_button"
         />
 
+    <TextView
+        android:id="@+id/resetPass_textbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="10dp"
+        android:clickable="true"
+        android:textColor="@color/red"
+        android:text="Forget Password?  Reset Here!"
+        android:textSize="20sp" />
+
 
     <TextView
         android:id="@+id/login_signup_textbtn"
-        android:layout_width="337dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="17dp"
         android:text="Not Registered yet?   Signup Here!"
         android:textSize="20sp"
         android:clickable="true"
