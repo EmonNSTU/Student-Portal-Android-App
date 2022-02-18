@@ -33,18 +33,6 @@ public class SignupActivity extends AppCompatActivity {
     private String userId;
     SharedPreferences sharedPreferences;
 
-    private static final String SHARED_PREF = "Email_verification";
-    private static final String fireFolder = "Users";
-    private static final String fireName = "Name";
-    private static final String fireMail = "Email";
-    private static final String fireBatch = "Batch";
-    private static final String firePhone = "Phone";
-    private static final String fireGender = "Gender";
-    private static final String fireNone = "Unavailable";
-    private static final String fireVerify = "Verified";
-    private static final String fireRoll = "Student ID";
-    private static final String fireBlood = "Blood Group";
-    private static final String fireOccupation = "Occupation";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +53,7 @@ public class SignupActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
-        sharedPreferences = getSharedPreferences(SHARED_PREF,MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(Config.SHARED_PREF,MODE_PRIVATE);
 
         regBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,17 +109,17 @@ public class SignupActivity extends AppCompatActivity {
                         regBtn.setEnabled(false);
                         userId = auth.getUid();
                         Map<String ,Object> user = new HashMap<>();
-                        user.put(fireMail, mail);
-                        user.put(fireName, name);
-                        user.put(fireBatch, batch);
-                        user.put(fireRoll, roll);
-                        user.put(fireGender, fireNone);
-                        user.put(fireBlood, fireNone);
-                        user.put(firePhone, fireNone);
-                        user.put(fireOccupation, fireNone);
-                        user.put(fireVerify, false);
+                        user.put(Config.fireMail, mail);
+                        user.put(Config.fireName, name);
+                        user.put(Config.fireBatch, batch);
+                        user.put(Config.fireRoll, roll);
+                        user.put(Config.fireGender, Config.fireNone);
+                        user.put(Config.fireBlood, Config.fireNone);
+                        user.put(Config.firePhone, Config.fireNone);
+                        user.put(Config.fireOccupation, Config.fireNone);
+                        user.put(Config.fireVerify, false);
 
-                        firestore.collection(fireFolder).document(userId).set(user);
+                        firestore.collection(Config.fireFolder).document(userId).set(user);
 
                         auth.getCurrentUser().sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override

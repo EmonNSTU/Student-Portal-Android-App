@@ -112,11 +112,11 @@ public class EditProfileActivity extends AppCompatActivity {
                     } else rePass.setError(null);
                 }
 
-                firestore.collection(fireFolder).document(userId).update(fireName, regName);
-                firestore.collection(fireFolder).document(userId).update(fireMail, regMail);
-                firestore.collection(fireFolder).document(userId).update(firePhone, regPhone);
-                firestore.collection(fireFolder).document(userId).update(fireGender, regGender);
-                firestore.collection(fireFolder).document(userId).update(fireBatch, regBatch);
+                firestore.collection(Config.fireFolder).document(userId).update(Config.fireName, regName);
+                firestore.collection(Config.fireFolder).document(userId).update(Config.fireMail, regMail);
+                firestore.collection(Config.fireFolder).document(userId).update(Config.firePhone, regPhone);
+                firestore.collection(Config.fireFolder).document(userId).update(Config.fireGender, regGender);
+                firestore.collection(Config.fireFolder).document(userId).update(Config.fireBatch, regBatch);
 
                     startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                     finish();

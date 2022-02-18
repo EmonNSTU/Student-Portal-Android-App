@@ -2,13 +2,17 @@ package com.example.studentportal;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Locale;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -18,22 +22,12 @@ public class ProfileActivity extends AppCompatActivity {
     FirebaseFirestore firestore;
     FirebaseUser firebaseUser;
 
-    private static final String fireFolder = "Users";
-    private static final String fireName = "Name";
-    private static final String fireMail = "Email";
-    private static final String fireBatch = "Batch";
-    private static final String firePhone = "Phone";
-    private static final String fireGender = "Gender";
-    private static final String fireNone = "Unavailable";
-    private static final String fireVerify = "Verified";
-    private static final String fireRoll = "Student ID";
-    private static final String fireBlood = "Blood Group";
-    private static final String fireOccupation = "Occupation";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        getSupportActionBar().setTitle("Profile");
 
         pr_name = findViewById(R.id.profile_name);
         pr_id = findViewById(R.id.profile_id);
@@ -51,17 +45,23 @@ public class ProfileActivity extends AppCompatActivity {
 
         String userId = firebaseUser.getUid();
 
-        firestore.collection(fireFolder).document(userId)
+        firestore.collection(Config.fireFolder).document(userId)
                 .addSnapshotListener(this, (documentSnapshot,e)->{
-                    pr_name.setText(documentSnapshot.getString(fireName));
-                    pr_id.setText(documentSnapshot.getString(fireRoll));
-                    pr_batch.setText(documentSnapshot.getString(fireBatch));
-                    pr_email.setText(documentSnapshot.getString(fireMail));
-                    pr_phone.setText(documentSnapshot.getString(firePhone));
-                    pr_blood.setText(documentSnapshot.getString(fireBlood));
-                    pr_occupation.setText(documentSnapshot.getString(fireOccupation));
-                    pr_gender.setText(documentSnapshot.getString(fireGender));
+                    pr_name.setText(documentSnapshot.getString(Config.fireName));
+                    pr_id.setText(documentSnapshot.getString(Config.fireRoll));
+                    pr_batch.setText(documentSnapshot.getString(Config.fireBatch));
+                    pr_email.setText(documentSnapshot.getString(Config.fireMail));
+                    pr_phone.setText(documentSnapshot.getString(Config.firePhone));
+                    pr_blood.setText(documentSnapshot.getString(Config.fireBlood));
+                    pr_occupation.setText(documentSnapshot.getString(Config.fireOccupation));
+                    pr_gender.setText(documentSnapshot.getString(Config.fireGender));
                 });
 
+        pr_edit_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ProfileActivity.this, EditActivity.class));
+            }
+        });
     }
 }
