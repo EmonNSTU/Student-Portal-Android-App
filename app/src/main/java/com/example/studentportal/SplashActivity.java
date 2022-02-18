@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.Window;
@@ -13,6 +14,8 @@ import android.widget.Toast;
 
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
+
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +32,13 @@ public class SplashActivity extends AppCompatActivity {
                 try {
                     sleep(2000);
 
-                    Intent i=new Intent(getBaseContext(),LoginActivity.class);
-                    startActivity(i);
-
+                    if (isLogin()){
+                        openHomeActivity();
+                    }
+                    else {
+                        Intent i=new Intent(getBaseContext(),LoginActivity.class);
+                        startActivity(i);
+                    }
                     finish();
                 } catch (Exception e) {
                     Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -39,6 +46,17 @@ public class SplashActivity extends AppCompatActivity {
             }
         };
         background.start();
+    }
+
+    private boolean isLogin(){
+        sharedPreferences = getSharedPreferences(Config.SHARED_PREF,MODE_PRIVATE);
+        boolean status = sharedPreferences.getBoolean(Config.LOGIN_STATUS,false);
+        return status;
+    }
+
+    public void openHomeActivity(){
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
     }
 
 }

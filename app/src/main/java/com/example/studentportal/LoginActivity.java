@@ -32,12 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     private String userId;
     boolean verified = false;
     SharedPreferences sharedPreferences;
-
-    private static final String SHARED_PREF = "Email_verification";
-    private static final String KEY_NAME = "verified";
-    private static final String fireFolder = "Users";
-    private static final String fireVerify = "Verified";
-
+    private FirebaseUser firebaseUser;
 
 
     @Override
@@ -55,17 +50,15 @@ public class LoginActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
 
-        sharedPreferences = getSharedPreferences(SHARED_PREF,MODE_PRIVATE);
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        sharedPreferences = getSharedPreferences(Config.SHARED_PREF,MODE_PRIVATE);
+        firebaseUser = firebaseAuth.getCurrentUser();
 
         if(firebaseUser != null) {
             firebaseUser.reload();
 
             if (firebaseUser.isEmailVerified()) {
-                firestore.collection(fireFolder).document(userId).update(fireVerify, true);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean(KEY_NAME, true);
-                editor.apply();
+                userId = firebaseUser.getUid();
+                firestore.collection(Config.fireFolder).document(userId).update(Config.fireVerify, true);
             }
         }
 
@@ -117,26 +110,23 @@ public class LoginActivity extends AppCompatActivity {
                 public void onSuccess(AuthResult authResult) {
 
                     userId = authResult.getUser().getUid();
+                    firebaseUser = authResult.getUser();
 
                     firebaseUser.reload().addOnSuccessListener(unused -> {
                         if (firebaseUser.isEmailVerified()) {
-                            firestore.collection(fireFolder).document(userId).update(fireVerify, true);
-
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putBoolean(KEY_NAME,true);
-                            editor.apply();
+                            firestore.collection(Config.fireFolder).document(userId).update(Config.fireVerify, true);
+                            saveLoginStatus(true);
                         }
                     });
 
                     firebaseUser.reload();
-                    firestore.collection(fireFolder).document(userId)
+                    firestore.collection(Config.fireFolder).document(userId)
                             .get()
                             .addOnSuccessListener(documentSnapshot -> {
                                 if (documentSnapshot.exists()){
                                     progressBar.setVisibility(View.GONE);
-                                    verified = documentSnapshot.getBoolean(fireVerify);
+                                    verified = documentSnapshot.getBoolean(Config.fireVerify);
                                     if (verified){
-
                                         startActivity(new Intent(LoginActivity.this,HomeActivity.class));
                                         finish();
                                     }else {
@@ -170,29 +160,15 @@ public class LoginActivity extends AppCompatActivity {
 
         });
     }
+
+    private void saveLoginStatus(boolean status) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(Config.LOGIN_STATUS,status);
+        editor.apply();
+    }
+
     public void openEmailVerificationActivity(){
-        Intent intent = new Intent(this, EmailVarificationActivity.class);
+        Intent intent = new Intent(this, SignupActivity.class);
         startActivity(intent);
-    }
-    public void openHomeActivity(){
-        Intent intent = new Intent(this, HomeActivity.class);
-        startActivity(intent);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        sharedPreferences = getSharedPreferences(SHARED_PREF,MODE_PRIVATE);
-        boolean key = sharedPreferences.getBoolean(KEY_NAME,false);
-
-        if(firebaseAuth.getCurrentUser() != null && key) {
-            openHomeActivity();
-            finish();
-        } else{
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean(KEY_NAME,false);
-            editor.apply();
-        }
     }
 }
