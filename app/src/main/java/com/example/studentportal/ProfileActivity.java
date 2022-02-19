@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,6 +19,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     TextView pr_name, pr_id, pr_batch, pr_email, pr_phone, pr_blood, pr_occupation, pr_gender;
     Button pr_edit_btn;
+    ImageView pr_image;
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firestore;
     FirebaseUser firebaseUser;
@@ -29,6 +31,7 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         getSupportActionBar().setTitle("Profile");
 
+        pr_image = findViewById(R.id.profile_image);
         pr_name = findViewById(R.id.profile_name);
         pr_id = findViewById(R.id.profile_id);
         pr_batch = findViewById(R.id.profile_batch);
