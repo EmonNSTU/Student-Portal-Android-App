@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -47,6 +48,10 @@ public class ProfileActivity extends AppCompatActivity {
         firestore = FirebaseFirestore.getInstance();
 
         String userId = firebaseUser.getUid();
+
+        if(firebaseUser.getPhotoUrl() != null){
+            Glide.with(this).load(firebaseUser.getPhotoUrl()).into(pr_image);
+        }
 
         firestore.collection(Config.fireFolder).document(userId)
                 .addSnapshotListener(this, (documentSnapshot,e)->{

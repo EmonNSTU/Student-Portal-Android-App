@@ -4,6 +4,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -24,11 +25,20 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
@@ -43,9 +53,13 @@ public class EditActivity extends AppCompatActivity {
     private ImageView ed_image;
     private Button ed_update;
     private ProgressBar progressBar;
+    private File file;
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firestore;
     FirebaseUser firebaseUser;
+    StorageReference storageReference;
+    Bitmap bitmap;
+    Uri imageUri;
 
     @SuppressLint("ResourceType")
     @Override
@@ -68,11 +82,14 @@ public class EditActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
+        storageReference = FirebaseStorage.getInstance().getReference(Config.fireFolder);
 
         String userId = firebaseUser.getUid();
-        final String gender = Config.fireNone ;
+        //final String gender = Config.fireNone ;
 
-        pickImage();
+        if(firebaseUser.getPhotoUrl() != null){
+            Glide.with(this).load(firebaseUser.getPhotoUrl()).into(ed_image);
+        }
 
         firestore.collection(Config.fireFolder).document(userId)
                 .addSnapshotListener(this, (documentSnapshot,e)->{
@@ -84,6 +101,7 @@ public class EditActivity extends AppCompatActivity {
                     ed_occupation.setHint(documentSnapshot.getString(Config.fireOccupation));
 
                 });
+        pickImage();
 
         ed_update.setOnClickListener(new View.OnClickListener() {
 
@@ -128,9 +146,22 @@ public class EditActivity extends AppCompatActivity {
                     firestore.collection(Config.fireFolder).document(userId).update(Config.fireGender, gender);
                 }
 
-                firebaseUser.reload();
-                startActivity(new Intent(EditActivity.this,ProfileActivity.class));
-                finish();
+                if(bitmap != null){
+                    handleUpload(bitmap);
+
+                } else{
+                    firebaseUser.reload();
+
+                    if(!name.isEmpty() || !batch.isEmpty() || !email.isEmpty() || isGenderSelected()
+                        || !phone.isEmpty() || !blood.isEmpty() || !occupation.isEmpty()){
+                        Toast.makeText(EditActivity.this, "Profile Updated Successfully!", Toast.LENGTH_SHORT).show();
+                    } else{
+                        Toast.makeText(EditActivity.this, "No Changes Found!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    startActivity(new Intent(EditActivity.this,ProfileActivity.class));
+                    finish();
+                }
 
             }
 
@@ -166,7 +197,6 @@ public class EditActivity extends AppCompatActivity {
 
     }
 
-    private File file;
     ActivityResultLauncher<Intent> startActivityForResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
@@ -178,19 +208,20 @@ public class EditActivity extends AppCompatActivity {
                         Uri imageUri = Objects.requireNonNull(data).getData();
 
                         int orientation = getOrientation(EditActivity.this, imageUri); //get orientation in degree
-                        Log.d("TAG",String.valueOf(orientation));
+                        //Log.d("TAG",String.valueOf(orientation));
 
                         try {
                             file = FileUtil.from(EditActivity.this, imageUri);
-                            Log.d("TAG", "onActivityResult: filePath: "+ file.getAbsolutePath());
+                            //Log.d("TAG", "onActivityResult: filePath: "+ file.getAbsolutePath());
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
 
-                        Bitmap bitmap;
+                        //Bitmap bitmap;
                         try {
                             bitmap = rotateImage(EditActivity.this, imageUri,orientation);
                             ed_image.setImageBitmap(bitmap);
+                            //handleUpload(bitmap);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -199,6 +230,60 @@ public class EditActivity extends AppCompatActivity {
                 }
             }
     );
+
+    private void handleUpload(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        StorageReference reference = FirebaseStorage.getInstance().getReference()
+                .child(Config.fireProfileImg).child(userId + ".jpeg");
+
+        reference.putBytes(byteArrayOutputStream.toByteArray())
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                         getDownloadUrl(reference);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(EditActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void getDownloadUrl(StorageReference reference) {
+        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                setUserProfileUri(uri);
+            }
+        });
+    }
+
+    private void setUserProfileUri(Uri uri) {
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        UserProfileChangeRequest request = new UserProfileChangeRequest.Builder()
+                .setPhotoUri(uri)
+                .build();
+        firebaseUser.updateProfile(request)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(EditActivity.this, "Profile Updated Successfully!", Toast.LENGTH_SHORT).show();
+                        firebaseUser.reload();
+                        startActivity(new Intent(EditActivity.this,ProfileActivity.class));
+                        finish();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(EditActivity.this, "Profile Picture Upload Failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     public static Bitmap rotateImage(Context context, Uri uri, int orientation) throws IOException {
 
