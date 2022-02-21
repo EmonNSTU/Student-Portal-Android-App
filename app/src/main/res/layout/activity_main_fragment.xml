@@ -4,10 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".DrawerLayout"
+    tools:context=".MainFragmentActivity"
     android:id="@+id/drawerLayout"
     tools:openDrawer="start"
     >
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/fragment_content_main"/>
 
     <com.google.android.material.navigation.NavigationView
         android:layout_width="wrap_content"
@@ -15,7 +20,7 @@
         android:id="@+id/navigation_view"
         app:menu="@menu/navegation_menu_layout"
         android:layout_gravity="start"
-        app:headerLayout="@layout/nevagation_profile">
+        app:headerLayout="@layout/navigation_profile">
 
 
     </com.google.android.material.navigation.NavigationView>

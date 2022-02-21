@@ -50,7 +50,7 @@ public class HomeActivity extends AppCompatActivity {
         navBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(HomeActivity.this, DrawerLayout.class));
+                startActivity(new Intent(HomeActivity.this, MainFragmentActivity.class));
             }
         });
 

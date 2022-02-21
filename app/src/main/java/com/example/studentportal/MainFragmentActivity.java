@@ -3,9 +3,13 @@ package com.example.studentportal;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,7 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
-public class DrawerLayout extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainFragmentActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,ShowPostFragment.onButtonClick {
 
     androidx.drawerlayout.widget.DrawerLayout drawerLayout;
     ActionBarDrawerToggle toggle;
@@ -26,6 +30,9 @@ public class DrawerLayout extends AppCompatActivity implements NavigationView.On
 
     ImageView n_image;
     TextView n_name, n_mail;
+
+    FragmentManager fragmentManager;
+    FragmentTransaction fragmentTransaction;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseStorage firebaseStorage;
@@ -36,7 +43,7 @@ public class DrawerLayout extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_drawyer_layout);
+        setContentView(R.layout.activity_main_fragment);
 
         drawerLayout = findViewById(R.id.drawerLayout);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close);
@@ -53,6 +60,10 @@ public class DrawerLayout extends AppCompatActivity implements NavigationView.On
 
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         navigationView.setNavigationItemSelectedListener(this);
@@ -66,6 +77,10 @@ public class DrawerLayout extends AppCompatActivity implements NavigationView.On
                     n_name.setText(documentSnapshot.getString(Config.fireName));
                     n_mail.setText(documentSnapshot.getString(Config.fireMail));
                 });
+
+
+        fragmentTransaction.add(R.id.container_fragment, new ShowPostFragment());
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -79,6 +94,7 @@ public class DrawerLayout extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Intent i;
+        drawerLayout.closeDrawer(GravityCompat.START);
         if(item.getItemId() == R.id.home_menu){
             i = new Intent(this,HomeActivity.class);
             startActivity(i);
@@ -87,6 +103,14 @@ public class DrawerLayout extends AppCompatActivity implements NavigationView.On
             i = new Intent(this,ProfileActivity.class);
             startActivity(i);
         }
-        return false;
+        return true;
+    }
+
+    @Override
+    public void buttonClicked() {
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container_fragment, new PostFragment());
+        fragmentTransaction.commit();
     }
 }
