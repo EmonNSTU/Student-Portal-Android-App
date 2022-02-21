@@ -10,7 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StudentPortal">
         <activity
-            android:name=".EditActivity"
+            android:name=".DrawerLayout"
+            android:exported="false" />
+        <activity
+            android:name=".EditProfileActivity"
             android:exported="false" />
         <activity
             android:name=".ProfileActivity"
@@ -22,9 +25,6 @@
             android:name=".LoginActivity"
             android:exported="false"
             android:label="@string/title_activity_login" />
-        <activity
-            android:name=".EditProfileActivity"
-            android:exported="false" />
         <activity
             android:name=".HomeActivity"
             android:exported="false" />

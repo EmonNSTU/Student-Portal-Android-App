@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/home_menu"
+            android:title="Home"
+            android:icon="@drawable/ic_baseline_home_24"/>
+
+        <item
+            android:id="@+id/profile_menu"
+            android:title="Profile"
+            android:icon="@drawable/ic_baseline_person_24"/>
+
+        <item
+            android:id="@+id/students_menu"
+            android:title="Students"
+            android:icon="@drawable/ic_baseline_engineering_24"/>
+
+        <item
+            android:id="@+id/contact_menu"
+            android:title="Contact Us"
+            android:icon="@drawable/ic_baseline_phone_in_talk_24"/>
+
+        <item
+            android:id="@+id/share_menu"
+            android:title="Share"
+            android:icon="@drawable/ic_baseline_share_24"/>
+
+    </group>
+</menu>

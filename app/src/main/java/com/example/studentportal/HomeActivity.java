@@ -12,7 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private Button logoutBtn, profileBtn;
+    private Button logoutBtn, profileBtn, navBtn;
     FirebaseAuth firebaseAuth;
 
     SharedPreferences sharedPreferences;
@@ -28,6 +28,7 @@ public class HomeActivity extends AppCompatActivity {
 
         logoutBtn = findViewById(R.id.logout_bn);
         profileBtn = findViewById(R.id.profile_bn);
+        navBtn = findViewById(R.id.navegationBtn);
         firebaseAuth = FirebaseAuth.getInstance();
 
         sharedPreferences = getSharedPreferences(SHARED_PREF,MODE_PRIVATE);
@@ -43,6 +44,13 @@ public class HomeActivity extends AppCompatActivity {
                 firebaseAuth.signOut();
                 openLoginActivity();
                 finish();
+            }
+        });
+
+        navBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(HomeActivity.this, DrawerLayout.class));
             }
         });
 

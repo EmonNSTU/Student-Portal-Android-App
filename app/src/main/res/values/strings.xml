@@ -11,4 +11,6 @@
     <string name="login_failed">"Login failed"</string>
     <string name="verification">Check your Spam box if not found! It may take a while. </string>
     <string name="retry">Click Here if Email isn\'t received! </string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
 </resources>

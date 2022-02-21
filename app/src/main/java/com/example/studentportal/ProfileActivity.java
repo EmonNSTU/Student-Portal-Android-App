@@ -14,8 +14,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.Locale;
-
 public class ProfileActivity extends AppCompatActivity {
 
     TextView pr_name, pr_id, pr_batch, pr_email, pr_phone, pr_blood, pr_occupation, pr_gender;
@@ -68,7 +66,7 @@ public class ProfileActivity extends AppCompatActivity {
         pr_edit_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ProfileActivity.this, EditActivity.class));
+                startActivity(new Intent(ProfileActivity.this, EditProfileActivity.class));
             }
         });
     }
