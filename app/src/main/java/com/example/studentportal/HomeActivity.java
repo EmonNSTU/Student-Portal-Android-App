@@ -14,11 +14,8 @@ public class HomeActivity extends AppCompatActivity {
 
     private Button logoutBtn, profileBtn, navBtn;
     FirebaseAuth firebaseAuth;
-
     SharedPreferences sharedPreferences;
 
-    private static final String SHARED_PREF = "Email_verification";
-    private static final String KEY_NAME = "verified";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,14 +28,14 @@ public class HomeActivity extends AppCompatActivity {
         navBtn = findViewById(R.id.navegationBtn);
         firebaseAuth = FirebaseAuth.getInstance();
 
-        sharedPreferences = getSharedPreferences(SHARED_PREF,MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(Config.SHARED_PREF,MODE_PRIVATE);
 
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean(KEY_NAME,false);
+                editor.putBoolean(Config.LOGIN_STATUS,false);
                 editor.apply();
 
                 firebaseAuth.signOut();
