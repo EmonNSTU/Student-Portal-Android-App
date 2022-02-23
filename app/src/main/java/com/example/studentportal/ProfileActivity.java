@@ -29,9 +29,6 @@ public class ProfileActivity extends AppCompatActivity {
     FirebaseUser firebaseUser;
     SharedPreferences sharedPreferences;
 
-    private static final String SHARED_PREF = "Email_verification";
-    private static final String KEY_NAME = "verified";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

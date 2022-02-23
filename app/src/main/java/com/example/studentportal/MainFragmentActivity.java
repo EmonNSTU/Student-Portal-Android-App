@@ -44,6 +44,7 @@ public class MainFragmentActivity extends AppCompatActivity implements Navigatio
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_fragment);
+        getSupportActionBar().setTitle("Home");
 
         drawerLayout = findViewById(R.id.drawerLayout);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close);
@@ -101,6 +102,10 @@ public class MainFragmentActivity extends AppCompatActivity implements Navigatio
         }
         if(item.getItemId() == R.id.profile_menu){
             i = new Intent(this,ProfileActivity.class);
+            startActivity(i);
+        }
+        if(item.getItemId() == R.id.students_menu){
+            i = new Intent(this,BatchesActivity.class);
             startActivity(i);
         }
         return true;
