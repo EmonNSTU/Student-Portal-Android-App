@@ -103,7 +103,6 @@ public class BatchesActivity extends AppCompatActivity implements BatchAdapter.I
     @Override
     public void onItemClicked(int position) {
 
-        Toast.makeText(this, batchList.get(position).getBatch() + " Batch Clicked!", Toast.LENGTH_SHORT).show();
         Intent i = new Intent(this, StudentActivity.class);
         Bundle b = new Bundle();
         b.putString(Config.fireBatch, batchList.get(position).getBatch());

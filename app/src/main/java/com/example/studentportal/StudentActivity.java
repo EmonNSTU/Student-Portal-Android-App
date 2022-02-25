@@ -5,9 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -72,8 +76,8 @@ public class StudentActivity extends AppCompatActivity implements StudentAdapter
         if(b != null){
             user = b.getString(Config.fireBatch);
 
-            int userId = Integer.valueOf(user);
-            fireStore.collection(Config.fireFolder).whereEqualTo(Config.fireBatch, userId)
+            int batch = Integer.valueOf(user);
+            fireStore.collection(Config.fireFolder).whereEqualTo(Config.fireBatch, batch)
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
@@ -95,6 +99,58 @@ public class StudentActivity extends AppCompatActivity implements StudentAdapter
 
     @Override
     public void onItemClicked(int position) {
-        Toast.makeText(this, studentList.get(position).getUserId(), Toast.LENGTH_SHORT).show();
+        firebaseAuth = FirebaseAuth.getInstance();
+        String id1 = studentList.get(position).getUserId();
+        String id2 = firebaseAuth.getCurrentUser().getUid();
+
+        if(id1.equals(id2)){
+            startActivity(new Intent(this, ProfileActivity.class));
+        }
+        else {
+            Intent intent = new Intent(this, ViewProfileActivity.class);
+            Bundle b = new Bundle();
+            b.putString("USER_ID", studentList.get(position).getUserId());
+            intent.putExtras(b);
+            startActivity(intent);
+        }
+    }
+    //menu bar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_bar_layout, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Intent i;
+        if(item.getItemId() == R.id.menu_home){
+            i = new Intent(this, HomeActivity.class);
+            startActivity(i);
+        }
+        if(item.getItemId() == R.id.menu_profile){
+            i = new Intent(this, ProfileActivity.class);
+            startActivity(i);
+            finish();
+        }
+        if(item.getItemId() == R.id.menu_logout){
+
+            sharedPreferences = getSharedPreferences(Config.SHARED_PREF,MODE_PRIVATE);
+            firebaseAuth = FirebaseAuth.getInstance();
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(Config.LOGIN_STATUS,false);
+            editor.apply();
+            firebaseAuth.signOut();
+            i = new Intent(this, LoginActivity.class);
+            startActivity(i);
+            finish();
+        }
+        if(item.getItemId() == R.id.menu_students){
+            i = new Intent(this, BatchesActivity.class);
+            startActivity(i);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
