@@ -89,28 +89,6 @@ public class BatchesActivity extends AppCompatActivity implements BatchAdapter.I
 
     }
 
-    ValueEventListener listener = new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot snapshot) {
-            Log.d("error_db", "onDataChange: called");
-            Log.d("error_db", "onDataChange: isExist: "+snapshot.exists());
-            if (snapshot.exists()){
-                for (DataSnapshot snp: snapshot.getChildren()) {
-                    String batchNo = snp.getKey();
-                    String batchSession = snp.getValue().toString();
-                    BatchModelClass model = new BatchModelClass(batchNo,batchSession);
-                    batchList.add(model);
-                    batchAdapter.notifyDataSetChanged();
-                }
-            }
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError error) {
-            Log.d("error_db", "onCancelled: error: "+error.getMessage());
-        }
-    };
-
     private void initRecyclerView() {
 
         recyclerView = findViewById(R.id.batch_recyclerView);
@@ -124,8 +102,13 @@ public class BatchesActivity extends AppCompatActivity implements BatchAdapter.I
 
     @Override
     public void onItemClicked(int position) {
-        Log.d("error_db", "onItemClicked: clicked session: "+batchList.get(position).getSession());
-        Toast.makeText(this, batchList.get(position).getSession(), Toast.LENGTH_SHORT).show();
+
+        Toast.makeText(this, batchList.get(position).getBatch() + " Batch Clicked!", Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(this, StudentActivity.class);
+        Bundle b = new Bundle();
+        b.putString(Config.fireBatch, batchList.get(position).getBatch());
+        i.putExtras(b);
+        startActivity(i);
     }
 
     //menu bar

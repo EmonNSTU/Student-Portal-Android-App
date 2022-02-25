@@ -1,5 +1,6 @@
 package com.example.studentportal;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,7 @@ public class BatchAdapter extends RecyclerView.Adapter<BatchAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BatchAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BatchAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
         String adapter_batch = batchList.get(position).getBatch();
         String adapter_session = batchList.get(position).getSession();

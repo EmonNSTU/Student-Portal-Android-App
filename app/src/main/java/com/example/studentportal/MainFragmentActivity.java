@@ -96,14 +96,6 @@ public class MainFragmentActivity extends AppCompatActivity implements Navigatio
         return super.onOptionsItemSelected(item);
     }
 
-    //menu bar
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_bar_layout, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Intent i;
@@ -121,34 +113,6 @@ public class MainFragmentActivity extends AppCompatActivity implements Navigatio
             startActivity(i);
         }
 
-        //menu bar
-
-        if(item.getItemId() == R.id.menu_home){
-            i = new Intent(this, HomeActivity.class);
-            startActivity(i);
-        }
-        if(item.getItemId() == R.id.menu_profile){
-            i = new Intent(this, ProfileActivity.class);
-            startActivity(i);
-        }
-        if(item.getItemId() == R.id.menu_students){
-            i = new Intent(this, BatchesActivity.class);
-            startActivity(i);
-            finish();
-        }
-        if(item.getItemId() == R.id.menu_logout){
-
-            sharedPreferences = getSharedPreferences(Config.SHARED_PREF,MODE_PRIVATE);
-            firebaseAuth = FirebaseAuth.getInstance();
-
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean(Config.LOGIN_STATUS,false);
-            editor.apply();
-            firebaseAuth.signOut();
-            i = new Intent(this, LoginActivity.class);
-            startActivity(i);
-            finish();
-        }
         return true;
     }
 
