@@ -57,6 +57,7 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
             }
         });
+
     }
     public void openLoginActivity(){
         Intent intent = new Intent(this, LoginActivity.class);

@@ -8,8 +8,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -33,6 +36,7 @@ public class MainFragmentActivity extends AppCompatActivity implements Navigatio
 
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
+    SharedPreferences sharedPreferences;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseStorage firebaseStorage;
@@ -92,21 +96,58 @@ public class MainFragmentActivity extends AppCompatActivity implements Navigatio
         return super.onOptionsItemSelected(item);
     }
 
+    //menu bar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_bar_layout, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Intent i;
         drawerLayout.closeDrawer(GravityCompat.START);
-        if(item.getItemId() == R.id.home_menu){
+        if(item.getItemId() == R.id.home_nev){
             i = new Intent(this,HomeActivity.class);
             startActivity(i);
         }
-        if(item.getItemId() == R.id.profile_menu){
+        if(item.getItemId() == R.id.profile_nev){
             i = new Intent(this,ProfileActivity.class);
             startActivity(i);
         }
-        if(item.getItemId() == R.id.students_menu){
+        if(item.getItemId() == R.id.students_nev){
             i = new Intent(this,BatchesActivity.class);
             startActivity(i);
+        }
+
+        //menu bar
+
+        if(item.getItemId() == R.id.menu_home){
+            i = new Intent(this, HomeActivity.class);
+            startActivity(i);
+        }
+        if(item.getItemId() == R.id.menu_profile){
+            i = new Intent(this, ProfileActivity.class);
+            startActivity(i);
+        }
+        if(item.getItemId() == R.id.menu_students){
+            i = new Intent(this, BatchesActivity.class);
+            startActivity(i);
+            finish();
+        }
+        if(item.getItemId() == R.id.menu_logout){
+
+            sharedPreferences = getSharedPreferences(Config.SHARED_PREF,MODE_PRIVATE);
+            firebaseAuth = FirebaseAuth.getInstance();
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(Config.LOGIN_STATUS,false);
+            editor.apply();
+            firebaseAuth.signOut();
+            i = new Intent(this, LoginActivity.class);
+            startActivity(i);
+            finish();
         }
         return true;
     }
@@ -118,4 +159,5 @@ public class MainFragmentActivity extends AppCompatActivity implements Navigatio
         fragmentTransaction.replace(R.id.container_fragment, new PostFragment());
         fragmentTransaction.commit();
     }
+
 }

@@ -15,5 +15,6 @@ public class Config {
     public static final String fireBlood = "Blood Group";
     public static final String fireOccupation = "Occupation";
     public static final String fireProfileImg = "Profile Pictures";
+    public static final String fireBatchFolder = "Batches";
 
 }

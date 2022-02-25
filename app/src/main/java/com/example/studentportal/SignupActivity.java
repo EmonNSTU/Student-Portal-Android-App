@@ -101,6 +101,8 @@ public class SignupActivity extends AppCompatActivity {
                     }else vfyRePass.setError(null);
                 }
 
+                int intBatch = Integer.parseInt(batch);
+
                 progressBar.setVisibility(View.VISIBLE);
 
                 auth.createUserWithEmailAndPassword(mail,pass).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
@@ -109,9 +111,10 @@ public class SignupActivity extends AppCompatActivity {
                         regBtn.setEnabled(false);
                         userId = auth.getUid();
                         Map<String ,Object> user = new HashMap<>();
+                        //Map<String ,Object> stu = new HashMap<>();
                         user.put(Config.fireMail, mail);
                         user.put(Config.fireName, name);
-                        user.put(Config.fireBatch, batch);
+                        user.put(Config.fireBatch, intBatch);
                         user.put(Config.fireRoll, roll);
                         user.put(Config.fireGender, Config.fireNone);
                         user.put(Config.fireBlood, Config.fireNone);
@@ -119,7 +122,14 @@ public class SignupActivity extends AppCompatActivity {
                         user.put(Config.fireOccupation, Config.fireNone);
                         user.put(Config.fireVerify, false);
 
+                        //stu.put(mail, userId);
+
                         firestore.collection(Config.fireFolder).document(userId).set(user);
+                        //firestore.collection(Config.fireBatchFolder).document(batch).set(stu);
+
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean(Config.LOGIN_STATUS,false);
+                        editor.apply();
 
                         auth.getCurrentUser().sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override

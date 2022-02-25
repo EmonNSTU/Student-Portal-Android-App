@@ -59,9 +59,11 @@ public class ProfileActivity extends AppCompatActivity {
 
         firestore.collection(Config.fireFolder).document(userId)
                 .addSnapshotListener(this, (documentSnapshot,e)->{
+
+                    int b = documentSnapshot.getLong(Config.fireBatch).intValue();
                     pr_name.setText(documentSnapshot.getString(Config.fireName));
                     pr_id.setText(documentSnapshot.getString(Config.fireRoll));
-                    pr_batch.setText(documentSnapshot.getString(Config.fireBatch));
+                    pr_batch.setText(String.valueOf(b));
                     pr_email.setText(documentSnapshot.getString(Config.fireMail));
                     pr_phone.setText(documentSnapshot.getString(Config.firePhone));
                     pr_blood.setText(documentSnapshot.getString(Config.fireBlood));
@@ -94,6 +96,7 @@ public class ProfileActivity extends AppCompatActivity {
         if(item.getItemId() == R.id.menu_profile){
             i = new Intent(this, ProfileActivity.class);
             startActivity(i);
+            finish();
         }
         if(item.getItemId() == R.id.menu_logout){
 
@@ -103,10 +106,14 @@ public class ProfileActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(Config.LOGIN_STATUS,false);
             editor.apply();
+            firebaseAuth.signOut();
             i = new Intent(this, LoginActivity.class);
             startActivity(i);
             finish();
-            firebaseAuth.signOut();
+        }
+        if(item.getItemId() == R.id.menu_students){
+            i = new Intent(this, BatchesActivity.class);
+            startActivity(i);
         }
         return super.onOptionsItemSelected(item);
     }

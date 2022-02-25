@@ -111,7 +111,6 @@ public class LoginActivity extends AppCompatActivity {
 
                     userId = authResult.getUser().getUid();
                     firebaseUser = authResult.getUser();
-
                     firebaseUser.reload().addOnSuccessListener(unused -> {
                         if (firebaseUser.isEmailVerified()) {
                             firestore.collection(Config.fireFolder).document(userId).update(Config.fireVerify, true);
@@ -119,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
 
-                    firebaseUser.reload();
+                    //firebaseUser.reload();
                     firestore.collection(Config.fireFolder).document(userId)
                             .get()
                             .addOnSuccessListener(documentSnapshot -> {

@@ -89,8 +89,9 @@ public class EditProfileActivity extends AppCompatActivity {
 
         firestore.collection(Config.fireFolder).document(userId)
                 .addSnapshotListener(this, (documentSnapshot,e)->{
+                    int b = documentSnapshot.getLong(Config.fireBatch).intValue();
                     ed_name.setHint(documentSnapshot.getString(Config.fireName));
-                    ed_batch.setHint(documentSnapshot.getString(Config.fireBatch));
+                    ed_batch.setHint(String.valueOf(b));
                     ed_email.setHint(documentSnapshot.getString(Config.fireMail));
                     ed_phone.setHint(documentSnapshot.getString(Config.firePhone));
                     ed_blood.setHint(documentSnapshot.getString(Config.fireBlood));
@@ -123,7 +124,8 @@ public class EditProfileActivity extends AppCompatActivity {
                 }
 
                 if (!batch.isEmpty()) {
-                    firestore.collection(Config.fireFolder).document(userId).update(Config.fireBatch, batch);
+                    int intBatch = Integer.parseInt(batch);
+                    firestore.collection(Config.fireFolder).document(userId).update(Config.fireBatch, intBatch);
                 }
                 if (!email.isEmpty()) {
                     firestore.collection(Config.fireFolder).document(userId).update(Config.fireMail, email);

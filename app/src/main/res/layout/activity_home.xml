@@ -18,7 +18,7 @@
         android:background="@drawable/holo_blue_button"
         android:text="Navigation"
         android:textAllCaps="false"
-        android:textSize="10sp" />
+        android:textSize="12sp" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/logout_bn"
@@ -30,8 +30,7 @@
         android:background="@drawable/holo_blue_button"
         android:text="Logout"
         android:textAllCaps="false"
-        android:textSize="10sp"
-        />
+        android:textSize="12sp" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/profile_bn"
@@ -44,6 +43,6 @@
         android:background="@drawable/holo_blue_button"
         android:text="Profile"
         android:textAllCaps="false"
-        android:textSize="10sp" />
+        android:textSize="12sp" />
 
 </RelativeLayout>

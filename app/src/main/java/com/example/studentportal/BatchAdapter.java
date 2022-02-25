@@ -14,9 +14,11 @@ import java.util.List;
 public class BatchAdapter extends RecyclerView.Adapter<BatchAdapter.ViewHolder> {
 
     private List<BatchModelClass> batchList;
+    private ItemClickListener itemClickListener;
 
-    public BatchAdapter(List<BatchModelClass> batchList){
+    public BatchAdapter(List<BatchModelClass> batchList,ItemClickListener itemClickListener){
         this.batchList = batchList;
+        this.itemClickListener = itemClickListener;
     }
 
     @NonNull
@@ -33,6 +35,13 @@ public class BatchAdapter extends RecyclerView.Adapter<BatchAdapter.ViewHolder> 
         String adapter_session = batchList.get(position).getSession();
 
         holder.setData(adapter_batch, adapter_session);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                itemClickListener.onItemClicked(position);
+            }
+        });
 
     }
 
@@ -59,5 +68,9 @@ public class BatchAdapter extends RecyclerView.Adapter<BatchAdapter.ViewHolder> 
             batch.setText(adapter_batch);
             session.setText(adapter_session);
         }
+    }
+
+    interface ItemClickListener {
+        public void onItemClicked(int position);
     }
 }
