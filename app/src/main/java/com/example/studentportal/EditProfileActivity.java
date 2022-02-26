@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -49,6 +50,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private EditText ed_name, ed_batch, ed_email, ed_phone, ed_blood, ed_occupation;
     private RadioGroup ed_gender;
+    private RadioButton ed_male, ed_female;
     private ImageView ed_image;
     private Button ed_update;
     private ProgressBar progressBar;
@@ -57,6 +59,7 @@ public class EditProfileActivity extends AppCompatActivity {
     FirebaseUser firebaseUser;
     StorageReference storageReference;
     Bitmap bitmap;
+    private String g = "";
 
     @SuppressLint("ResourceType")
     @Override
@@ -73,6 +76,8 @@ public class EditProfileActivity extends AppCompatActivity {
         ed_blood = findViewById(R.id.edit_blood_group);
         ed_occupation = findViewById(R.id.edit_occupation);
         ed_gender = findViewById(R.id.edit_gender);
+        ed_male = findViewById(R.id.radio_male);
+        ed_female = findViewById(R.id.radio_female);
         ed_update = findViewById(R.id.edit_profile_btn);
         progressBar = findViewById(R.id.edit_progressbar);
 
@@ -96,6 +101,15 @@ public class EditProfileActivity extends AppCompatActivity {
                     ed_phone.setHint(documentSnapshot.getString(Config.firePhone));
                     ed_blood.setHint(documentSnapshot.getString(Config.fireBlood));
                     ed_occupation.setHint(documentSnapshot.getString(Config.fireOccupation));
+
+                    if(documentSnapshot.getString(Config.fireGender).equals("Male")){
+                        ed_male.setChecked(true);
+                        g = "male";
+                    }
+                    else if(documentSnapshot.getString(Config.fireGender).equals("Female")){
+                        ed_female.setChecked(true);
+                        g = "female";
+                    }
 
                 });
         pickImage();
@@ -168,10 +182,15 @@ public class EditProfileActivity extends AppCompatActivity {
                 if (ed_gender.getCheckedRadioButtonId() == -1) {
                     return false;
                 } else {
-                    if (ed_gender.getCheckedRadioButtonId() == R.id.radio_male)
+                    if (ed_gender.getCheckedRadioButtonId() == R.id.radio_male && g.equals("female")){
                         gender = "Male";
-                    else gender = "Female";
-                    return true;
+                        return true;
+                    }
+                    else if (ed_gender.getCheckedRadioButtonId() == R.id.radio_female && g.equals("male")){
+                        gender = "Female";
+                        return true;
+                    }
+                    else return false;
                 }
             }
 
@@ -223,7 +242,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void handleUpload(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 30, byteArrayOutputStream);
 
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         StorageReference reference = FirebaseStorage.getInstance().getReference()
