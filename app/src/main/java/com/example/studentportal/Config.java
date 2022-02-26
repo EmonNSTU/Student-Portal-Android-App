@@ -16,5 +16,6 @@ public class Config {
     public static final String fireOccupation = "Occupation";
     public static final String fireProfileImg = "Profile Pictures";
     public static final String fireBatchFolder = "Batches";
+    public static final String fireProfileFolder = "Profile Pictures";
 
 }

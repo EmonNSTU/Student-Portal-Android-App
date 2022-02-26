@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,10 +14,19 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
+import java.io.IOException;
 
 public class ViewProfileActivity extends AppCompatActivity {
 
@@ -25,6 +36,7 @@ public class ViewProfileActivity extends AppCompatActivity {
     private FirebaseFirestore firestore;
     private FirebaseUser firebaseUser;
     private SharedPreferences sharedPreferences;
+    private StorageReference storageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +58,20 @@ public class ViewProfileActivity extends AppCompatActivity {
         firestore = FirebaseFirestore.getInstance();
 
         Bundle bundle = getIntent().getExtras();
-        String user = null;
         if(bundle != null) {
             String userId = bundle.getString("USER_ID");
+            String path = Config.fireProfileFolder + "/" + userId + ".jpeg";
+            storageReference = FirebaseStorage.getInstance().getReference().child(path);
+
+            try {
+                final File localFile = File.createTempFile(userId, "jpeg");
+                storageReference.getFile(localFile).addOnSuccessListener(taskSnapshot -> {
+                    Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                    pr_image.setImageBitmap(bitmap);
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             firestore.collection(Config.fireFolder).document(userId)
                     .addSnapshotListener(this, (documentSnapshot,e)->{

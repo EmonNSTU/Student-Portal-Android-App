@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "930689154302",
+    "firebase_url": "https://student-portal-ice-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "student-portal-ice",
     "storage_bucket": "student-portal-ice.appspot.com"
   },
