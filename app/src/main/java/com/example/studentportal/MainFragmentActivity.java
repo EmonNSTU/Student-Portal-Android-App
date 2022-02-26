@@ -101,8 +101,8 @@ public class MainFragmentActivity extends AppCompatActivity implements Navigatio
         Intent i;
         drawerLayout.closeDrawer(GravityCompat.START);
         if(item.getItemId() == R.id.home_nev){
-            i = new Intent(this,HomeActivity.class);
-            startActivity(i);
+            finish();
+            startActivity(getIntent());
         }
         if(item.getItemId() == R.id.profile_nev){
             i = new Intent(this,ProfileActivity.class);

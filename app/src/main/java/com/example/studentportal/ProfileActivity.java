@@ -91,7 +91,7 @@ public class ProfileActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         Intent i;
         if(item.getItemId() == R.id.menu_home){
-            i = new Intent(this, HomeActivity.class);
+            i = new Intent(this, MainFragmentActivity.class);
             startActivity(i);
         }
         if(item.getItemId() == R.id.menu_profile){
@@ -107,9 +107,8 @@ public class ProfileActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(Config.LOGIN_STATUS,false);
             editor.apply();
-            firebaseAuth.signOut();
-            i = new Intent(this, LoginActivity.class);
-            startActivity(i);
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
             finish();
         }
         if(item.getItemId() == R.id.menu_students){

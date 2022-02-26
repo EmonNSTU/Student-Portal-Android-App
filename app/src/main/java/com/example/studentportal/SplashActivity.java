@@ -55,7 +55,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void openHomeActivity(){
-        Intent intent = new Intent(this, HomeActivity.class);
+        Intent intent = new Intent(this, MainFragmentActivity.class);
         startActivity(intent);
     }
 

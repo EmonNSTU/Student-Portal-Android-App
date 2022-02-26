@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
 
-        signup_txtBtn.setOnClickListener(view -> openEmailVerificationActivity());
+        signup_txtBtn.setOnClickListener(view -> openSignupActivity());
 
         resetPass.setOnClickListener(view -> {
 
@@ -118,7 +118,6 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
 
-                    //firebaseUser.reload();
                     firestore.collection(Config.fireFolder).document(userId)
                             .get()
                             .addOnSuccessListener(documentSnapshot -> {
@@ -126,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
                                     progressBar.setVisibility(View.GONE);
                                     verified = documentSnapshot.getBoolean(Config.fireVerify);
                                     if (verified){
-                                        startActivity(new Intent(LoginActivity.this,HomeActivity.class));
+                                        startActivity(new Intent(LoginActivity.this,MainFragmentActivity.class));
                                         finish();
                                     }else {
                                         Toast.makeText(LoginActivity.this, "Email is not verified yet!", Toast.LENGTH_SHORT).show();
@@ -166,7 +165,7 @@ public class LoginActivity extends AppCompatActivity {
         editor.apply();
     }
 
-    public void openEmailVerificationActivity(){
+    public void openSignupActivity(){
         Intent intent = new Intent(this, SignupActivity.class);
         startActivity(intent);
     }

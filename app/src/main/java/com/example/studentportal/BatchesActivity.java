@@ -122,7 +122,7 @@ public class BatchesActivity extends AppCompatActivity implements BatchAdapter.I
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         Intent i;
         if(item.getItemId() == R.id.menu_home){
-            i = new Intent(this, HomeActivity.class);
+            i = new Intent(this, MainFragmentActivity.class);
             startActivity(i);
         }
         if(item.getItemId() == R.id.menu_profile){
