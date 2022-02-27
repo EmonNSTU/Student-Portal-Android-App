@@ -52,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences(Config.SHARED_PREF,MODE_PRIVATE);
         firebaseUser = firebaseAuth.getCurrentUser();
+        firestore.enableNetwork();
 
         if(firebaseUser != null) {
             firebaseUser.reload();
@@ -108,7 +109,6 @@ public class LoginActivity extends AppCompatActivity {
             firebaseAuth.signInWithEmailAndPassword(logMail,logPass).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                 @Override
                 public void onSuccess(AuthResult authResult) {
-
                     userId = authResult.getUser().getUid();
                     firebaseUser = authResult.getUser();
                     firebaseUser.reload().addOnSuccessListener(unused -> {
@@ -133,11 +133,14 @@ public class LoginActivity extends AppCompatActivity {
                                             @Override
                                             public void onSuccess(Void unused) {
                                                 Toast.makeText(LoginActivity.this, "Verification Mail Sent", Toast.LENGTH_SHORT).show();
+                                                progressBar.setVisibility(View.INVISIBLE);
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(LoginActivity.this, "Verification Mail not sent, "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(LoginActivity.this, "Verification Mail not sent, "
+                                                        +e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                progressBar.setVisibility(View.INVISIBLE);
                                             }
                                         });
                                     }
@@ -153,6 +156,13 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this,"Sign in failed, " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     Toast.makeText(LoginActivity.this, "Signup first if you don't have an Account yet!", Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.INVISIBLE);
+                }
+            });
+
+            firebaseUser.reload().addOnSuccessListener(unused -> {
+                if (firebaseUser.isEmailVerified()) {
+                    firestore.collection(Config.fireFolder).document(userId).update(Config.fireVerify, true);
+                    saveLoginStatus(true);
                 }
             });
 

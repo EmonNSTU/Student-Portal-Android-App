@@ -190,6 +190,14 @@ public class EditProfileActivity extends AppCompatActivity {
                         gender = "Female";
                         return true;
                     }
+                    else if(ed_gender.getCheckedRadioButtonId() == R.id.radio_female && g.equals("")){
+                        gender = "Female";
+                        return true;
+                    }
+                    else if(ed_gender.getCheckedRadioButtonId() == R.id.radio_male && g.equals("")){
+                        gender = "Male";
+                        return true;
+                    }
                     else return false;
                 }
             }

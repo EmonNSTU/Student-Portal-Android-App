@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="30dp"
     android:background="@color/background"
     tools:context=".LoginActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="30dp"
+        >
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -51,10 +55,11 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/login_bn"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="50dp"
         android:text="Login"
+        android:layout_gravity="center"
         android:textAllCaps="false"
         android:textSize="20sp"
         android:background="@drawable/rounded_button"
@@ -65,7 +70,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="35dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="30dp"
         android:clickable="true"
         android:textColor="@color/red"
         android:text="Forget Password?  Reset Here!"
@@ -76,8 +81,9 @@
         android:id="@+id/login_signup_textbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:layout_marginLeft="17dp"
+        android:layout_marginTop="50dp"
+        android:textStyle="bold"
+        android:layout_marginLeft="22dp"
         android:text="Not Registered yet?   Signup Here!"
         android:textSize="20sp"
         android:clickable="true"
@@ -88,8 +94,9 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         android:visibility="invisible"
         />
+    </LinearLayout>
 
-</LinearLayout>
+</ScrollView>
