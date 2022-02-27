@@ -12,23 +12,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import com.google.android.gms.common.api.Batch;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -122,7 +111,7 @@ public class BatchesActivity extends AppCompatActivity implements BatchAdapter.I
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         Intent i;
         if(item.getItemId() == R.id.menu_home){
-            i = new Intent(this, MainFragmentActivity.class);
+            i = new Intent(this, HomeActivity.class);
             startActivity(i);
         }
         if(item.getItemId() == R.id.menu_profile){

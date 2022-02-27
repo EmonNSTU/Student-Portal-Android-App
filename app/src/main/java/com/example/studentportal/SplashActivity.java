@@ -3,11 +3,9 @@ package com.example.studentportal;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -55,7 +53,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     public void openHomeActivity(){
-        Intent intent = new Intent(this, MainFragmentActivity.class);
+        Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
     }
 

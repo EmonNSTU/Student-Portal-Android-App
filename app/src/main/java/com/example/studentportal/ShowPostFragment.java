@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,7 +22,7 @@ public class ShowPostFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_show_post, container, false);
 
-        Button postFragBtn = view.findViewById(R.id.postFragmentBtn);
+        TextView postFragBtn = view.findViewById(R.id.postFragmentBtn);
         postFragBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

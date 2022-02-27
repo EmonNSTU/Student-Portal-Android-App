@@ -19,7 +19,7 @@
             android:name=".BatchesActivity"
             android:exported="false" />
         <activity
-            android:name=".MainFragmentActivity"
+            android:name=".HomeActivity"
             android:exported="false" />
         <activity
             android:name=".EditProfileActivity"
@@ -34,9 +34,6 @@
             android:name=".LoginActivity"
             android:exported="false"
             android:label="@string/title_activity_login" />
-        <activity
-            android:name=".HomeActivity"
-            android:exported="false" />
         <activity
             android:name=".SplashActivity"
             android:exported="true">

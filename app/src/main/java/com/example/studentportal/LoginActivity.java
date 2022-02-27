@@ -125,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
                                     progressBar.setVisibility(View.GONE);
                                     verified = documentSnapshot.getBoolean(Config.fireVerify);
                                     if (verified){
-                                        startActivity(new Intent(LoginActivity.this,MainFragmentActivity.class));
+                                        startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                                         finish();
                                     }else {
                                         Toast.makeText(LoginActivity.this, "Email is not verified yet!", Toast.LENGTH_SHORT).show();
