@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,14 +15,19 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.example.studentportal.Config;
 import com.example.studentportal.R;
 import com.example.studentportal.adapter.ShowPostAdapter;
 import com.example.studentportal.modelClasses.PostUploadModel;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,12 +40,28 @@ public class ShowPostFragment extends Fragment {
     private List<PostUploadModel> postUploadModelList;
     private DatabaseReference databaseReference;
     private ValueEventListener eventListener;
+    private String userId;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseFirestore firestore;
+    private FirebaseUser firebaseUser;
+    private ImageView userImg;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_show_post, container, false);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        firestore = FirebaseFirestore.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+        userId = firebaseUser.getUid();
+
+        userImg = view.findViewById(R.id.currentUserImg);
+
+        if(firebaseUser.getPhotoUrl() != null){
+            Glide.with(this).load(firebaseUser.getPhotoUrl()).into(userImg);
+        }
 
         TextView postFragBtn = view.findViewById(R.id.postFragmentBtn);
         postFragBtn.setOnClickListener(new View.OnClickListener() {
@@ -50,7 +72,7 @@ public class ShowPostFragment extends Fragment {
         });
 
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.post_recyclerView);
+        recyclerView = view.findViewById(R.id.post_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         postUploadModelList = new ArrayList<>();
 
@@ -58,10 +80,6 @@ public class ShowPostFragment extends Fragment {
         recyclerView.setAdapter(showPostAdapter);
 
         setPostRecycler();
-
-
-
-
         return view;
     }
 
@@ -112,6 +130,6 @@ public class ShowPostFragment extends Fragment {
     }
 
     public interface onButtonClick{
-        public void buttonClicked();
+        void buttonClicked();
     }
 }

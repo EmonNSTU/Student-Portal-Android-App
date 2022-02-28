@@ -7,8 +7,7 @@
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -18,14 +17,13 @@
             android:id="@+id/postRelative"
             >
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/postCreatorImg"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
+                android:layout_marginStart="5dp"
                 android:elevation="15dp"
                 android:padding="10dp"
-                android:layout_marginStart="5dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/default_face"
                 app:civ_border_color="@color/black"
@@ -47,7 +45,6 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:inputType="text"
                 android:id="@+id/postSpaceId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -59,12 +56,13 @@
                 android:background="#FAFEEE"
                 android:elevation="10dp"
                 android:hint="Write your post here!"
+                android:inputType="textMultiLine"
                 android:minHeight="60dp"
                 android:padding="5dp"
                 android:textSize="15sp" />
 
             <ImageView
-                android:id="@+id/postImage"
+                android:id="@+id/upPostImage"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:layout_below="@+id/postSpaceId"
@@ -78,10 +76,10 @@
                 android:visibility="gone"/>
 
             <TextView
-                android:id="@+id/addImage"
+                android:id="@+id/upAddImage"
                 android:layout_width="100dp"
                 android:layout_height="50dp"
-                android:layout_below="@+id/postImage"
+                android:layout_below="@+id/upPostImage"
                 android:layout_marginStart="70dp"
                 android:layout_marginEnd="60dp"
                 android:layout_marginBottom="20dp"
@@ -93,13 +91,13 @@
                 android:padding="5dp"
                 android:text="Add Image"
                 android:textColor="@color/black"
-                android:textSize="15sp" />
+                android:textSize="13sp" />
             <TextView
-                android:id="@+id/postStatus"
+                android:id="@+id/upRemoveImg"
                 android:layout_width="100dp"
                 android:layout_height="50dp"
-                android:layout_toEndOf="@+id/addImage"
-                android:layout_below="@id/postImage"
+                android:layout_toEndOf="@+id/upAddImage"
+                android:layout_below="@id/upPostImage"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="3dp"
                 android:layout_marginBottom="20dp"
@@ -113,17 +111,18 @@
                 android:textSize="13sp"
                 android:textColor="@color/black" />
 
-        </RelativeLayout>
+            <ProgressBar
+                android:id="@+id/upPostProgressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:layout_below="@+id/upRemoveImg"
+                android:visibility="gone"
+                />
 
-        <ProgressBar
-            android:id="@+id/postProgressBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:visibility="gone"
-            />
+        </RelativeLayout>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

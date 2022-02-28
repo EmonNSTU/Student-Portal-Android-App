@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/background"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/background"
+        android:background="#F0FDFD"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:elevation="10dp">
 
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -14,7 +18,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginStart="5dp"
-            android:elevation="15dp"
+            android:elevation="5dp"
             android:padding="10dp"
             android:scaleType="centerCrop"
             android:src="@drawable/default_face"
@@ -65,17 +69,14 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="0.5dp"
-            android:background="#FAFEEE"
-            android:elevation="10dp"
-            android:hint="Text Goes Here"
+            android:layout_marginBottom="1dp"
             android:minHeight="60dp"
             android:padding="5dp"
             android:textColor="@color/black"
             android:textSize="15sp" />
 
         <ImageView
-            android:id="@+id/postImage"
+            android:id="@+id/showPostImage"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_below="@+id/postTextId"
@@ -83,10 +84,8 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="20dp"
-            android:background="#FAFEEE"
-            android:elevation="10dp"
             android:padding="5dp"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
     </RelativeLayout>
 
