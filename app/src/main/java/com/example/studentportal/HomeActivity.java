@@ -16,13 +16,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.studentportal.HomeFragments.PostFragment;
+import com.example.studentportal.HomeFragments.ShowPostFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
-public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,ShowPostFragment.onButtonClick {
+public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ShowPostFragment.onButtonClick {
 
     androidx.drawerlayout.widget.DrawerLayout drawerLayout;
     ActionBarDrawerToggle toggle;

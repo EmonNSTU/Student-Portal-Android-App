@@ -29,20 +29,19 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginStart="10dp"
-            android:layout_marginEnd="20dp"
             android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginBottom="20dp"
             android:layout_toEndOf="@+id/postCreatorImg"
-            android:text="Post Something Here!"
-            android:textStyle="bold"
-            android:textAlignment="center"
-            android:gravity="center"
-            android:textSize="17sp"
             android:background="#FAFEEE"
             android:clickable="true"
-            android:focusable="true"
             android:elevation="10dp"
-            />
+            android:focusable="true"
+            android:gravity="center"
+            android:text="Post Something Here!"
+            android:textAlignment="center"
+            android:textSize="17sp"
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <ScrollView

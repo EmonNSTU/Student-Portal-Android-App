@@ -1,10 +1,10 @@
-package com.example.studentportal;
+package com.example.studentportal.modelClasses;
 
 public class StudentModelClass {
 
     private String name, roll, userId;
 
-    StudentModelClass(String name, String id, String userId) {
+    public StudentModelClass(String name, String id, String userId) {
         this.name = name;
         this.roll = id;
         this.userId = userId;

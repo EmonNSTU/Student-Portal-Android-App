@@ -44,10 +44,11 @@
                 android:elevation="20dp"
                 android:shadowColor="@color/red"
                 android:text="Post"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/postSpace"
+                android:inputType="text"
+                android:id="@+id/postSpaceId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/postCreatorImg"
@@ -66,7 +67,7 @@
                 android:id="@+id/postImage"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:layout_below="@+id/postSpace"
+                android:layout_below="@+id/postSpaceId"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"

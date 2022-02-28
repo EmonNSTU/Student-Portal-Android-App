@@ -1,4 +1,4 @@
-package com.example.studentportal;
+package com.example.studentportal.adapter;
 
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
@@ -8,6 +8,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.studentportal.R;
+import com.example.studentportal.modelClasses.StudentModelClass;
 
 import java.util.List;
 
@@ -68,7 +71,7 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.ViewHold
         }
     }
 
-    interface ItemClickListener {
+    public interface ItemClickListener {
         public void onItemClicked(int position);
     }
 }

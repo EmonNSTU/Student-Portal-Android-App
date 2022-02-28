@@ -1,10 +1,10 @@
-package com.example.studentportal;
+package com.example.studentportal.modelClasses;
 
 public class BatchModelClass {
 
     private String batch, session;
 
-    BatchModelClass(String batch, String session) {
+    public BatchModelClass(String batch, String session) {
         this.batch = batch;
         this.session = session;
     }
