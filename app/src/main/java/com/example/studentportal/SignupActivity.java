@@ -111,7 +111,6 @@ public class SignupActivity extends AppCompatActivity {
                         regBtn.setEnabled(false);
                         userId = auth.getUid();
                         Map<String ,Object> user = new HashMap<>();
-                        //Map<String ,Object> stu = new HashMap<>();
                         user.put(Config.fireMail, mail);
                         user.put(Config.fireName, name);
                         user.put(Config.fireBatch, intBatch);
@@ -122,10 +121,7 @@ public class SignupActivity extends AppCompatActivity {
                         user.put(Config.fireOccupation, Config.fireNone);
                         user.put(Config.fireVerify, false);
 
-                        //stu.put(mail, userId);
-
                         firestore.collection(Config.fireFolder).document(userId).set(user);
-                        //firestore.collection(Config.fireBatchFolder).document(batch).set(stu);
 
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putBoolean(Config.LOGIN_STATUS,false);
@@ -136,12 +132,15 @@ public class SignupActivity extends AppCompatActivity {
                             public void onSuccess(Void unused) {
                                 Toast.makeText(SignupActivity.this, "Verification Email Successfully Sent!", Toast.LENGTH_SHORT).show();
                                 try {
-                                    Toast.makeText(SignupActivity.this, "Verify your Email before Login", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SignupActivity.this, "Verify your Email to Continue...", Toast.LENGTH_SHORT).show();
                                     Thread.sleep(1000);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
-                                startActivity(new Intent(SignupActivity.this, LoginActivity.class));
+                                auth.signInWithEmailAndPassword(mail, pass);
+                                startActivity(new Intent(SignupActivity.this, EmailVerifyActivity.class));
+                                finish();
+                                progressBar.setVisibility(View.INVISIBLE);
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override

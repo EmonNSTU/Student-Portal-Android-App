@@ -49,10 +49,8 @@ public class LoginActivity extends AppCompatActivity {
         resetPass = findViewById(R.id.resetPass_textbtn);
         firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
-
         sharedPreferences = getSharedPreferences(Config.SHARED_PREF,MODE_PRIVATE);
         firebaseUser = firebaseAuth.getCurrentUser();
-        firestore.enableNetwork();
 
         if(firebaseUser != null) {
             firebaseUser.reload();
@@ -105,7 +103,6 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             } else password.setError(null);
 
-
             firebaseAuth.signInWithEmailAndPassword(logMail,logPass).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                 @Override
                 public void onSuccess(AuthResult authResult) {
@@ -134,6 +131,13 @@ public class LoginActivity extends AppCompatActivity {
                                             public void onSuccess(Void unused) {
                                                 Toast.makeText(LoginActivity.this, "Verification Mail Sent", Toast.LENGTH_SHORT).show();
                                                 progressBar.setVisibility(View.INVISIBLE);
+                                                startActivity(new Intent(LoginActivity.this, EmailVerifyActivity.class));
+                                                try {
+                                                    Toast.makeText(LoginActivity.this, "Verify your Email to Continue...", Toast.LENGTH_SHORT).show();
+                                                    Thread.sleep(1000);
+                                                } catch (InterruptedException e) {
+                                                    e.printStackTrace();
+                                                }
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
                                             @Override
