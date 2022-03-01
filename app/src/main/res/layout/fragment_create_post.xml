@@ -7,7 +7,8 @@
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -112,18 +113,18 @@
                 android:textSize="13sp"
                 android:textColor="@color/black" />
 
-            <ProgressBar
-                android:id="@+id/upPostProgressBar"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                android:layout_below="@+id/upRemoveImg"
-                android:visibility="gone"
-                />
-
         </RelativeLayout>
+
+        <ProgressBar
+            android:id="@+id/upPostProgressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="20dp"
+            android:layout_below="@+id/upRemoveImg"
+            android:visibility="gone"
+            />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

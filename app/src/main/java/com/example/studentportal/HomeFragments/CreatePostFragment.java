@@ -31,6 +31,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.studentportal.Config;
+import com.example.studentportal.HomeActivity;
 import com.example.studentportal.R;
 import com.example.studentportal.modelClasses.PostUploadModel;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -43,6 +44,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -131,25 +133,23 @@ public class CreatePostFragment extends Fragment {
                 strPost = postEditText.getText().toString().trim();
 
                 if(bitmap != null){
-                    Toast.makeText(getActivity(), "Handle Upload!", Toast.LENGTH_LONG).show();
                     handleUpload(bitmap);
                 }
 
-                storageReference.child(Config.StoragePostFolder).child(userId)
-                        .child(postDateTime + ".jpeg")
-                        .getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Toast.makeText(getActivity(), "get Url part", Toast.LENGTH_LONG).show();
-                        imageUri = uri;
-                        imageUrl = imageUri.toString();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });
+//                storageReference.child(Config.StoragePostFolder).child(userId)
+//                        .child(postDateTime + ".jpeg")
+//                        .getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                    @Override
+//                    public void onSuccess(Uri uri) {
+//                        imageUri = uri;
+//                        imageUrl = imageUri.toString();
+//                    }
+//                }).addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+//                    }
+//                });
 
                 if(!strPost.isEmpty() || bitmap != null){
                     PostUploadModel model = new PostUploadModel(
@@ -169,7 +169,8 @@ public class CreatePostFragment extends Fragment {
                                 postImg.setImageBitmap(null);
                                 postImg.setVisibility(View.GONE);
                                 Toast.makeText(getActivity(), "Post Created Successfully", Toast.LENGTH_LONG).show();
-                                progressBar.setVisibility(View.INVISIBLE);
+                                progressBar.setVisibility(View.GONE);
+                                startActivity(new Intent(getActivity(), HomeActivity.class));
                             }
                         }
                     }).addOnFailureListener(new OnFailureListener() {
@@ -177,13 +178,13 @@ public class CreatePostFragment extends Fragment {
                         public void onFailure(@NonNull Exception e) {
 
                             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
-                            progressBar.setVisibility(View.INVISIBLE);
+                            progressBar.setVisibility(View.GONE);
 
                         }
                     });
                 } else {
                     Toast.makeText(getActivity(), "Write Something or Add Image to Post!", Toast.LENGTH_SHORT).show();
-                    progressBar.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.GONE);
                 }
 
             }
@@ -233,8 +234,6 @@ public class CreatePostFragment extends Fragment {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
 
-        Toast.makeText(getActivity(), "Inside Handle Upload Function", Toast.LENGTH_SHORT).show();
-
         StorageReference reference = FirebaseStorage.getInstance().getReference()
                 .child(Config.StoragePostFolder)
                 .child(userId).child(postDateTime + ".jpeg");
@@ -243,57 +242,29 @@ public class CreatePostFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Toast.makeText(getActivity(), "Image Uploaded!", Toast.LENGTH_SHORT).show();
                     }
-                }).addOnFailureListener(new OnFailureListener() {
+                }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                progressBar.setVisibility(View.VISIBLE);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
-        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Toast.makeText(getActivity(), "Inside imageUrl assign part", Toast.LENGTH_SHORT).show();
-                Uri imgUri = uri;
-                imageUrl = imgUri.toString();
-            }
-        });
-    }
-//
-//    private void getDownloadUrl(StorageReference reference) {
 //        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
 //            @Override
 //            public void onSuccess(Uri uri) {
-//                setUserProfileUri(uri);
+//                Toast.makeText(getActivity(), "Inside imageUrl assign part", Toast.LENGTH_SHORT).show();
+//                Uri imgUri = uri;
+//                imageUrl = imgUri.toString();
 //            }
 //        });
-//    }
-//
-//    private void setUserProfileUri(Uri uri) {
-//        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-//
-//        UserProfileChangeRequest request = new UserProfileChangeRequest.Builder()
-//                .setPhotoUri(uri)
-//                .build();
-//        firebaseUser.updateProfile(request)
-//                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void unused) {
-//                        Toast.makeText(EditProfileActivity.this, "Profile Updated Successfully!", Toast.LENGTH_SHORT).show();
-//                        firebaseUser.reload();
-//                        startActivity(new Intent(EditProfileActivity.this, ProfileActivity.class));
-//                        finish();
-//                    }
-//                }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//                Toast.makeText(EditProfileActivity.this, "Profile Picture Upload Failed", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
-//
+    }
+
     public static Bitmap rotateImage(Context context, Uri uri, int orientation) throws IOException {
 
         ParcelFileDescriptor parcelFileDescriptor =
