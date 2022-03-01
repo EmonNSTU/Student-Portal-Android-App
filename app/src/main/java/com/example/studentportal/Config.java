@@ -14,8 +14,7 @@ public class Config {
     public static final String fireRoll = "Student ID";
     public static final String fireBlood = "Blood Group";
     public static final String fireOccupation = "Occupation";
-    public static final String fireProfileImg = "Profile Pictures";
-    public static final String fireBatchFolder = "Batches";
-    public static final String fireProfileFolder = "Profile Pictures";
+    public static final String StorageProfileFolder = "Profile Pictures";
+    public static final String StoragePostFolder = "Post Pictures";
 
 }

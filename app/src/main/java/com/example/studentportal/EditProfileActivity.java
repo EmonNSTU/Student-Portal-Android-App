@@ -254,7 +254,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         StorageReference reference = FirebaseStorage.getInstance().getReference()
-                .child(Config.fireProfileImg).child(userId + ".jpeg");
+                .child(Config.StorageProfileFolder).child(userId + ".jpeg");
 
         reference.putBytes(byteArrayOutputStream.toByteArray())
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {

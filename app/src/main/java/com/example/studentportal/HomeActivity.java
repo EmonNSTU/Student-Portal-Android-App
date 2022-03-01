@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.studentportal.HomeFragments.PostFragment;
+import com.example.studentportal.HomeFragments.CreatePostFragment;
 import com.example.studentportal.HomeFragments.ShowPostFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -119,7 +119,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     public void buttonClicked() {
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.container_fragment, new PostFragment());
+        fragmentTransaction.replace(R.id.container_fragment, new CreatePostFragment());
         fragmentTransaction.commit();
     }
 

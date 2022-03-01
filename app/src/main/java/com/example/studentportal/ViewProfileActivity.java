@@ -55,7 +55,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if(bundle != null) {
             String userId = bundle.getString("USER_ID");
-            String path = Config.fireProfileFolder + "/" + userId + ".jpeg";
+            String path = Config.StorageProfileFolder + "/" + userId + ".jpeg";
             storageReference = FirebaseStorage.getInstance().getReference().child(path);
 
             try {

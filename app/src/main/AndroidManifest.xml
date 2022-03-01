@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StudentPortal">
         <activity
+            android:name=".MyPostActivity"
+            android:exported="false" />
+        <activity
             android:name=".EmailVerifyActivity"
             android:exported="false" />
         <activity

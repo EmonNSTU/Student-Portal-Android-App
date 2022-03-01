@@ -63,14 +63,15 @@
 
             <ImageView
                 android:id="@+id/upPostImage"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxHeight="300dp"
+                android:maxWidth="500dp"
                 android:layout_below="@+id/postSpaceId"
-                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="20dp"
-                android:background="#FAFEEE"
                 android:elevation="10dp"
                 android:padding="5dp"
                 android:visibility="gone"/>

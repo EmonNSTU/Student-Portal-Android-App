@@ -7,14 +7,15 @@ public class PostUploadModel implements Serializable {
     private String postText;
     private String userId;
     private String postId;
+    private String imageUrl;
 
-    public PostUploadModel() {
-    }
+    public PostUploadModel(){}
 
-    public PostUploadModel(String postText, String userId, String postId) {
+    public PostUploadModel(String postText, String userId, String postId, String imageUrl) {
         this.postText = postText;
         this.userId = userId;
         this.postId = postId;
+        this.imageUrl = imageUrl;
     }
 
     public String getPostText() {
@@ -39,5 +40,13 @@ public class PostUploadModel implements Serializable {
 
     public void setPostId(String postId) {
         this.postId = postId;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

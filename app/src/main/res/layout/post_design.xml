@@ -73,7 +73,8 @@
             android:minHeight="60dp"
             android:padding="5dp"
             android:textColor="@color/black"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/showPostImage"
@@ -84,7 +85,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="20dp"
-            android:padding="5dp"
+            android:padding="2dp"
             android:visibility="gone" />
 
     </RelativeLayout>
