@@ -163,12 +163,12 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
 
-            firebaseUser.reload().addOnSuccessListener(unused -> {
-                if (firebaseUser.isEmailVerified()) {
-                    firestore.collection(Config.fireFolder).document(userId).update(Config.fireVerify, true);
-                    saveLoginStatus(true);
-                }
-            });
+//            firebaseUser.reload().addOnSuccessListener(unused -> {
+//                if (firebaseUser.isEmailVerified()) {
+//                    firestore.collection(Config.fireFolder).document(userId).update(Config.fireVerify, true);
+//                    saveLoginStatus(true);
+//                }
+//            });
 
         });
     }

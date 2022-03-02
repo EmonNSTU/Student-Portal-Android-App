@@ -125,7 +125,7 @@ public class MyPostActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(Config.LOGIN_STATUS,false);
             editor.apply();
-            firebaseAuth.signOut();
+            //firebaseAuth.signOut();
             i = new Intent(this, LoginActivity.class);
             startActivity(i);
             finish();
