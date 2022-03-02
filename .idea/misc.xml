@@ -14,7 +14,9 @@
         <entry key="..\:/AndroidStudioProjects/StudentPortal/app/src/main/res/layout/activity_signup.xml" value="0.264" />
         <entry key="..\:/Users/Exmyo/StudioProjects/StudentPortal/app/src/main/res/drawable-anydpi/ic_edit.xml" value="0.18385416666666668" />
         <entry key="..\:/Users/Exmyo/StudioProjects/StudentPortal/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.18385416666666668" />
+        <entry key="..\:/Users/Exmyo/StudioProjects/StudentPortal/app/src/main/res/font/bangers.xml" value="0.2760416666666667" />
         <entry key="..\:/Users/Exmyo/StudioProjects/StudentPortal/app/src/main/res/layout/activity_batches.xml" value="0.2359375" />
+        <entry key="..\:/Users/Exmyo/StudioProjects/StudentPortal/app/src/main/res/layout/activity_contract_us.xml" value="0.24583333333333332" />
         <entry key="..\:/Users/Exmyo/StudioProjects/StudentPortal/app/src/main/res/layout/activity_drawyer_layout.xml" value="0.2" />
         <entry key="..\:/Users/Exmyo/StudioProjects/StudentPortal/app/src/main/res/layout/activity_edit.xml" value="0.16770833333333332" />
         <entry key="..\:/Users/Exmyo/StudioProjects/StudentPortal/app/src/main/res/layout/activity_edit_profile.xml" value="0.25" />
@@ -30,6 +32,7 @@
         <entry key="..\:/Users/Exmyo/StudioProjects/StudentPortal/app/src/main/res/layout/activity_view_profile.xml" value="0.25" />
         <entry key="..\:/Users/Exmyo/StudioProjects/StudentPortal/app/src/main/res/layout/batch_design_layout.xml" value="0.25" />
         <entry key="..\:/Users/Exmyo/StudioProjects/StudentPortal/app/src/main/res/layout/fragment_content_main.xml" value="0.25" />
+        <entry key="..\:/Users/Exmyo/StudioProjects/StudentPortal/app/src/main/res/layout/fragment_create_post.xml" value="0.24583333333333332" />
         <entry key="..\:/Users/Exmyo/StudioProjects/StudentPortal/app/src/main/res/layout/fragment_post.xml" value="0.2" />
         <entry key="..\:/Users/Exmyo/StudioProjects/StudentPortal/app/src/main/res/layout/fragment_show_post.xml" value="0.25" />
         <entry key="..\:/Users/Exmyo/StudioProjects/StudentPortal/app/src/main/res/layout/navigation_profile.xml" value="0.25" />

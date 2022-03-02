@@ -16,10 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.studentportal.Config;
 import com.example.studentportal.R;
 import com.example.studentportal.adapter.ShowPostAdapter;
-import com.example.studentportal.modelClasses.PostUploadModel;
+import com.example.studentportal.modelClasses.PostModelClass;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -37,7 +36,7 @@ public class ShowPostFragment extends Fragment {
     private onButtonClick listener;
     private ShowPostAdapter showPostAdapter;
     private RecyclerView recyclerView;
-    private List<PostUploadModel> postUploadModelList;
+    private List<PostModelClass> postModelClassList;
     private DatabaseReference databaseReference;
     private ValueEventListener eventListener;
     private String userId;
@@ -74,9 +73,9 @@ public class ShowPostFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.post_recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        postUploadModelList = new ArrayList<>();
+        postModelClassList = new ArrayList<>();
 
-        showPostAdapter = new ShowPostAdapter(getActivity(), postUploadModelList);
+        showPostAdapter = new ShowPostAdapter(getActivity(), postModelClassList);
         recyclerView.setAdapter(showPostAdapter);
 
         setPostRecycler();
@@ -91,14 +90,14 @@ public class ShowPostFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                postUploadModelList.clear();
+                postModelClassList.clear();
 
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
 
                     for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
 
-                        PostUploadModel postUploadModel = dataSnapshot1.getValue(PostUploadModel.class);
-                        postUploadModelList.add(postUploadModel);
+                        PostModelClass postModelClass = dataSnapshot1.getValue(PostModelClass.class);
+                        postModelClassList.add(postModelClass);
                     }
 
                 }

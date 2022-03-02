@@ -33,7 +33,7 @@ import com.bumptech.glide.Glide;
 import com.example.studentportal.Config;
 import com.example.studentportal.HomeActivity;
 import com.example.studentportal.R;
-import com.example.studentportal.modelClasses.PostUploadModel;
+import com.example.studentportal.modelClasses.PostModelClass;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -152,7 +152,7 @@ public class CreatePostFragment extends Fragment {
 //                });
 
                 if(!strPost.isEmpty() || bitmap != null){
-                    PostUploadModel model = new PostUploadModel(
+                    PostModelClass model = new PostModelClass(
                             strPost,
                             userId,
                             postDateTime,

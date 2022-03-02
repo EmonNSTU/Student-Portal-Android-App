@@ -5,10 +5,20 @@
     android:layout_height="wrap_content"
     tools:context=".MyPostActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/myPostRecyclerView"/>
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:background="@color/background">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/myPostRecyclerView"
+            android:background="@color/white"/>
+
+    </ScrollView>
 
 
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -107,8 +107,16 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             i = new Intent(this,ProfileActivity.class);
             startActivity(i);
         }
+        if(item.getItemId() == R.id.myPost_nev){
+            i = new Intent(this,MyPostActivity.class);
+            startActivity(i);
+        }
         if(item.getItemId() == R.id.students_nev){
             i = new Intent(this,BatchesActivity.class);
+            startActivity(i);
+        }
+        if(item.getItemId() == R.id.contact_nev){
+            i = new Intent(this,ContractUsActivity.class);
             startActivity(i);
         }
 

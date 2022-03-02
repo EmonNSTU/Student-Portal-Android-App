@@ -2,16 +2,16 @@ package com.example.studentportal.modelClasses;
 
 import java.io.Serializable;
 
-public class PostUploadModel implements Serializable {
+public class PostModelClass implements Serializable {
 
     private String postText;
     private String userId;
     private String postId;
     private String imageUrl;
 
-    public PostUploadModel(){}
+    public PostModelClass(){}
 
-    public PostUploadModel(String postText, String userId, String postId, String imageUrl) {
+    public PostModelClass(String postText, String userId, String postId, String imageUrl) {
         this.postText = postText;
         this.userId = userId;
         this.postId = postId;
