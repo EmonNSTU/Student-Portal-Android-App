@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:background="@color/post_background"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
         android:elevation="5dp">
 
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -20,6 +19,8 @@
             android:layout_marginStart="5dp"
             android:elevation="5dp"
             android:padding="10dp"
+            android:clickable="true"
+            android:focusable="true"
             android:scaleType="centerCrop"
             android:src="@drawable/default_face"
             app:civ_border_color="@color/black"
@@ -34,6 +35,8 @@
             android:layout_marginEnd="5dp"
             android:layout_toEndOf="@+id/CreatorImg"
             android:gravity="center_vertical"
+            android:clickable="true"
+            android:focusable="true"
             android:text="Post Creator Name"
             android:textColor="@color/black"
             android:textSize="18sp"
@@ -84,6 +87,7 @@
             android:layout_marginTop="2dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="1dp"
+            android:textIsSelectable="true"
             android:padding="5dp"
             android:textColor="@color/black"
             android:textSize="15sp"
@@ -97,10 +101,47 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="20dp"
             android:padding="2dp"
             android:visibility="gone" />
 
     </RelativeLayout>
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/post_background"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:elevation="5dp"
+        android:layout_marginBottom="10dp">
+
+        <ImageButton
+            android:id="@+id/post_like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_like"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="60dp"
+            />
+
+        <ImageButton
+            android:id="@+id/post_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/comment"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="60dp"
+            />
+
+        <ImageButton
+            android:id="@+id/post_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/save"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="20dp"
+            />
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

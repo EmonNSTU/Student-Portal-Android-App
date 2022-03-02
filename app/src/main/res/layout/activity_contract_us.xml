@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/post_background"
+    android:background="@color/background"
     tools:context=".ContractUsActivity">
 
 
@@ -22,14 +22,16 @@
         app:civ_border_width="0.2dp"
         app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
         android:layout_width="350dp"
         android:layout_height="400dp"
-        android:background="@color/white"
+        android:background="@color/post_background"
         android:gravity="center_horizontal"
         android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -69,6 +71,17 @@
                 android:textAllCaps="true"
                 android:fontFamily="@font/bangers"
                 android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/facebook_link"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/facebook"
+                android:linksClickable="true"
+                android:textColorLink="@color/button"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="40dp"
+                android:textSize="15dp"/>
 
 
         </androidx.appcompat.widget.LinearLayoutCompat>

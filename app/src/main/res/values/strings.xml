@@ -13,4 +13,7 @@
     <string name="retry">Click Here if Email isn\'t received! </string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
+    <string name="facebook">Find Me on Facebook:<a href="https://www.facebook.com/profile.php?id=100006445333146">
+      facebook.com
+    </a></string>
 </resources>

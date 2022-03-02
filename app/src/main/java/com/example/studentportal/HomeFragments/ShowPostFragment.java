@@ -1,6 +1,7 @@
 package com.example.studentportal.HomeFragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.studentportal.ProfileActivity;
 import com.example.studentportal.R;
 import com.example.studentportal.adapter.ShowPostAdapter;
 import com.example.studentportal.modelClasses.PostModelClass;
@@ -67,6 +69,13 @@ public class ShowPostFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 listener.buttonClicked();
+            }
+        });
+
+        userImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), ProfileActivity.class));
             }
         });
 

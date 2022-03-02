@@ -1,8 +1,10 @@
 package com.example.studentportal.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +17,9 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.studentportal.Config;
+import com.example.studentportal.ProfileActivity;
 import com.example.studentportal.R;
+import com.example.studentportal.ViewProfileActivity;
 import com.example.studentportal.modelClasses.PostModelClass;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -94,6 +98,13 @@ public class ShowPostAdapter extends RecyclerView.Adapter<ShowPostAdapter.ShowPo
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        holder.image_creator.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //code here
+            }
+        });
 
         firestore.collection(Config.fireFolder).document(userID)
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
