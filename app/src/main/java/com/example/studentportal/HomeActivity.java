@@ -18,11 +18,14 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.studentportal.HomeFragments.CreatePostFragment;
 import com.example.studentportal.HomeFragments.ShowPostFragment;
+import com.example.studentportal.utils.SpManager;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+
+import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ShowPostFragment.onButtonClick {
 
@@ -85,6 +88,24 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         fragmentTransaction.add(R.id.container_fragment, new ShowPostFragment());
         fragmentTransaction.commit();
+
+        getProfile();
+    }
+
+    private void getProfile() {
+        String userId = Objects.requireNonNull(firebaseAuth.getUid());
+        firestore.collection(Config.fireFolder).document(userId)
+                .addSnapshotListener(this, (documentSnapshot,e)->{
+
+                    int batch = documentSnapshot.getLong(Config.fireBatch).intValue();
+                    String userName = documentSnapshot.getString(Config.fireName);
+                    String userProfileImageUrl = documentSnapshot.getString(Config.fireProfileImageUrl);
+
+                    SpManager.saveString(HomeActivity.this,SpManager.PREF_BATCH,String.valueOf(batch));
+                    SpManager.saveString(HomeActivity.this,SpManager.PREF_USER_ID,userId);
+                    SpManager.saveString(HomeActivity.this,SpManager.PREF_USER_NAME,userName);
+                    //SpManager.saveString(HomeActivity.this,SpManager.PREF_USER_PROFILE_IMAGE,userProfileImageUrl);
+                });
     }
 
     @Override
@@ -128,6 +149,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.container_fragment, new CreatePostFragment());
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 

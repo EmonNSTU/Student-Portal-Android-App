@@ -161,14 +161,8 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Signup first if you don't have an Account yet!", Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.INVISIBLE);
                 }
-            });
 
-//            firebaseUser.reload().addOnSuccessListener(unused -> {
-//                if (firebaseUser.isEmailVerified()) {
-//                    firestore.collection(Config.fireFolder).document(userId).update(Config.fireVerify, true);
-//                    saveLoginStatus(true);
-//                }
-//            });
+            });
 
         });
     }

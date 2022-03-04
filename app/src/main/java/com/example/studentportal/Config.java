@@ -16,5 +16,9 @@ public class Config {
     public static final String fireOccupation = "Occupation";
     public static final String StorageProfileFolder = "Profile Pictures";
     public static final String StoragePostFolder = "Post Pictures";
+    public static final String fireProfileImageUrl = "profile_image_url";
+
+    // post
+    public static final String USER_POSTS = "UserPosts";
 
 }

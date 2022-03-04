@@ -31,10 +31,10 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.studentportal.Config;
-import com.example.studentportal.HomeActivity;
 import com.example.studentportal.R;
 import com.example.studentportal.modelClasses.PostModelClass;
-import com.google.android.gms.tasks.OnCompleteListener;
+import com.example.studentportal.modelClasses.UserPostModel;
+import com.example.studentportal.utils.SpManager;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -72,7 +72,9 @@ public class CreatePostFragment extends Fragment {
     private ProgressBar progressBar;
     private Bitmap bitmap = null;
     private Uri imageUri;
-    private String imageUrl = null;
+    private String imageUrl = "";
+
+    private UserPostModel postModel;
 
     @Nullable
     @Override
@@ -132,8 +134,20 @@ public class CreatePostFragment extends Fragment {
                 progressBar.setVisibility(View.VISIBLE);
                 strPost = postEditText.getText().toString().trim();
 
+                if(!strPost.isEmpty() || bitmap != null){
+                    PostModelClass model = new PostModelClass(
+                            strPost,
+                            userId,
+                            postDateTime,
+                            imageUrl
+                    );
+
                 if(bitmap != null){
-                    handleUpload(bitmap);
+                    uploadImageToFirestore(bitmap,model);
+                }
+                else {
+                    createPostModel(model);
+                    databaseReference.child(Config.USER_POSTS).child(postModel.getId()).setValue(postModel);
                 }
 
 //                storageReference.child(Config.StoragePostFolder).child(userId)
@@ -151,37 +165,31 @@ public class CreatePostFragment extends Fragment {
 //                    }
 //                });
 
-                if(!strPost.isEmpty() || bitmap != null){
-                    PostModelClass model = new PostModelClass(
-                            strPost,
-                            userId,
-                            postDateTime,
-                            imageUrl
-                    );
 
-                    databaseReference.child("Post Data")
-                            .child(userId)
-                            .child(postDateTime).setValue(model).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()){
-                                postEditText.setText("");
-                                postImg.setImageBitmap(null);
-                                postImg.setVisibility(View.GONE);
-                                Toast.makeText(getActivity(), "Post Created Successfully", Toast.LENGTH_LONG).show();
-                                progressBar.setVisibility(View.GONE);
-                                startActivity(new Intent(getActivity(), HomeActivity.class));
-                            }
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
 
-                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
-                            progressBar.setVisibility(View.GONE);
-
-                        }
-                    });
+//                    databaseReference.child("Post Data")
+//                            .child(userId)
+//                            .child(postDateTime).setValue(model).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<Void> task) {
+//                            if (task.isSuccessful()){
+//                                postEditText.setText("");
+//                                postImg.setImageBitmap(null);
+//                                postImg.setVisibility(View.GONE);
+//                                Toast.makeText(getActivity(), "Post Created Successfully", Toast.LENGTH_LONG).show();
+//                                progressBar.setVisibility(View.GONE);
+//                                startActivity(new Intent(getActivity(), HomeActivity.class));
+//                            }
+//                        }
+//                    }).addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+//
+//                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+//                            progressBar.setVisibility(View.GONE);
+//
+//                        }
+//                    });
                 } else {
                     Toast.makeText(getActivity(), "Write Something or Add Image to Post!", Toast.LENGTH_SHORT).show();
                     progressBar.setVisibility(View.GONE);
@@ -192,6 +200,23 @@ public class CreatePostFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void createPostModel(PostModelClass model) {
+        postModel = new UserPostModel();
+        String id = databaseReference.child(Config.USER_POSTS).push().getKey();
+
+        postModel.setId(id);
+        postModel.setBatch(SpManager.getString(requireContext(),SpManager.PREF_BATCH));
+        postModel.setUser_id(SpManager.getString(requireContext(),SpManager.PREF_USER_ID));
+
+        postModel.setUser_profile_img(SpManager.getString(requireContext(),SpManager.PREF_USER_PROFILE_IMAGE));
+
+        postModel.setUser_name(SpManager.getString(requireContext(),SpManager.PREF_USER_NAME));
+
+        postModel.setPost(model.getPostText());
+        postModel.setImage_url(imageUrl);
+        postModel.setCreated_at(String.valueOf(System.currentTimeMillis()/1000));
     }
 
 
@@ -228,7 +253,7 @@ public class CreatePostFragment extends Fragment {
             }
     );
 
-    private void handleUpload(Bitmap bitmap) {
+    private void uploadImageToFirestore(Bitmap bitmap,PostModelClass model) {
 
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -239,10 +264,27 @@ public class CreatePostFragment extends Fragment {
                 .child(userId).child(postDateTime + ".jpeg");
 
         reference.putBytes(byteArrayOutputStream.toByteArray())
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    }
+                .addOnSuccessListener(taskSnapshot -> {
+                    Log.d("img_url", "onSuccess: ");
+
+                    reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Log.d("img_url", "onSuccess: url: "+uri.toString());
+                            String url = uri.toString();
+                            imageUrl = url;
+
+                            createPostModel(model);
+                            databaseReference.child(Config.USER_POSTS).child(postModel.getId()).setValue(postModel);
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            Log.d("img_url", "onFailure: "+exception.getLocalizedMessage());
+                        }
+                    });
+
                 }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {

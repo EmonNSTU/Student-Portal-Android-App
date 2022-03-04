@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.studentportal.utils.SpManager;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
@@ -108,6 +109,7 @@ public class SignupActivity extends AppCompatActivity {
                 auth.createUserWithEmailAndPassword(mail,pass).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
+                        SpManager.saveString(SignupActivity.this,SpManager.PREF_BATCH,batch);
                         regBtn.setEnabled(false);
                         userId = auth.getUid();
                         Map<String ,Object> user = new HashMap<>();

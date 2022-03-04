@@ -17,10 +17,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.studentportal.Config;
 import com.example.studentportal.ProfileActivity;
 import com.example.studentportal.R;
+import com.example.studentportal.adapter.PostAdapter;
 import com.example.studentportal.adapter.ShowPostAdapter;
 import com.example.studentportal.modelClasses.PostModelClass;
+import com.example.studentportal.modelClasses.UserPostModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,6 +32,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.protobuf.Value;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +50,9 @@ public class ShowPostFragment extends Fragment {
     private FirebaseFirestore firestore;
     private FirebaseUser firebaseUser;
     private ImageView userImg;
+
+    private ArrayList<UserPostModel> postList;
+    private PostAdapter adapter;
 
     @Nullable
     @Override
@@ -81,7 +88,7 @@ public class ShowPostFragment extends Fragment {
 
 
         recyclerView = view.findViewById(R.id.post_recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,true));
         postModelClassList = new ArrayList<>();
 
         showPostAdapter = new ShowPostAdapter(getActivity(), postModelClassList);
@@ -93,36 +100,64 @@ public class ShowPostFragment extends Fragment {
 
     private void setPostRecycler() {
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("Post Data");
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child(Config.USER_POSTS).addListenerForSingleValueEvent(postListener);
 
-        eventListener = databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//        databaseReference = FirebaseDatabase.getInstance().getReference("Post Data");
+//
+//        eventListener = databaseReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//
+//                postModelClassList.clear();
+//
+//                for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+//
+//                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
+//                        PostModelClass postModelClass = dataSnapshot1.getValue(PostModelClass.class);
+//                        postModelClassList.add(postModelClass);
+//                    }
+//
+//                }
+//
+//                showPostAdapter.notifyDataSetChanged();
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//                Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+//
+//            }
+//        });
 
-                postModelClassList.clear();
+    }
 
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()){
-
-                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
-
-                        PostModelClass postModelClass = dataSnapshot1.getValue(PostModelClass.class);
-                        postModelClassList.add(postModelClass);
-                    }
-
+    ValueEventListener postListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            if (snapshot.exists()) {
+                postList = new ArrayList<>();
+                for (DataSnapshot snp: snapshot.getChildren()) {
+                    UserPostModel item = snp.getValue(UserPostModel.class);
+                    postList.add(item);
                 }
-
-                showPostAdapter.notifyDataSetChanged();
-
+                adapter = new PostAdapter(postList,requireContext());
+                recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
             }
+            else toast("No data found");
+        }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
 
-                Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    };
 
-            }
-        });
-
+    private void toast(String message) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
