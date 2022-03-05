@@ -81,6 +81,7 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    //menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();

@@ -14,6 +14,7 @@ import android.view.MenuItem;
 
 import com.example.studentportal.adapter.StudentAdapter;
 import com.example.studentportal.modelClasses.StudentModelClass;
+import com.example.studentportal.utils.SpManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -142,10 +143,11 @@ public class StudentActivity extends AppCompatActivity implements StudentAdapter
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(Config.LOGIN_STATUS,false);
             editor.apply();
-            firebaseAuth.signOut();
-            i = new Intent(this, LoginActivity.class);
-            startActivity(i);
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
             finish();
+
+            SpManager.clearData(this);
         }
         if(item.getItemId() == R.id.menu_students){
             i = new Intent(this, BatchesActivity.class);

@@ -5,9 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.studentportal.adapter.MyPostAdapter;
@@ -190,5 +194,45 @@ public class SavedPostActivity extends AppCompatActivity implements PostAdapter.
     @Override
     public void onItemDelete(String id, int position) {
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_bar_layout, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Intent i;
+        if(item.getItemId() == R.id.menu_home){
+            i = new Intent(this, HomeActivity.class);
+            startActivity(i);
+        }
+        if(item.getItemId() == R.id.menu_profile){
+            i = new Intent(this, ProfileActivity.class);
+            startActivity(i);
+            finish();
+        }
+        if(item.getItemId() == R.id.menu_logout){
+
+            sharedPreferences = getSharedPreferences(Config.SHARED_PREF,MODE_PRIVATE);
+            firebaseAuth = FirebaseAuth.getInstance();
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(Config.LOGIN_STATUS,false);
+            editor.apply();
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+
+            SpManager.clearData(this);
+        }
+        if(item.getItemId() == R.id.menu_students){
+            i = new Intent(this, BatchesActivity.class);
+            startActivity(i);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

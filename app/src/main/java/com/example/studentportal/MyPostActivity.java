@@ -157,10 +157,11 @@ public class MyPostActivity extends AppCompatActivity implements PostAdapter.OnI
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(Config.LOGIN_STATUS,false);
             editor.apply();
-            //firebaseAuth.signOut();
-            i = new Intent(this, LoginActivity.class);
-            startActivity(i);
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
             finish();
+
+            SpManager.clearData(this);
         }
         if(item.getItemId() == R.id.menu_students){
             i = new Intent(this, BatchesActivity.class);
