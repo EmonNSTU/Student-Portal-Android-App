@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.studentportal.utils.SpManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -110,6 +111,8 @@ public class ProfileActivity extends AppCompatActivity {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();
+
+            SpManager.clearData(this);
         }
         if(item.getItemId() == R.id.menu_students){
             i = new Intent(this, BatchesActivity.class);

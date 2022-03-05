@@ -18,10 +18,10 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginStart="5dp"
-            android:elevation="5dp"
-            android:padding="10dp"
             android:clickable="true"
+            android:elevation="5dp"
             android:focusable="true"
+            android:padding="10dp"
             android:scaleType="centerCrop"
             android:src="@drawable/default_face"
             app:civ_border_color="@color/black"
@@ -35,9 +35,9 @@
             android:layout_marginTop="15dp"
             android:layout_marginEnd="5dp"
             android:layout_toEndOf="@+id/CreatorImg"
-            android:gravity="center_vertical"
             android:clickable="true"
             android:focusable="true"
+            android:gravity="center_vertical"
             android:text="Post Creator Name"
             android:textColor="@color/black"
             android:textSize="18sp"
@@ -169,17 +169,10 @@
         android:paddingBottom="3dp"
         android:elevation="5dp">
 
-<!--        <CheckBox-->
-<!--            android:id="@+id/post_like"-->
-<!--            android:elevation="5dp"-->
-<!--            android:layout_marginStart="5dp"-->
-<!--            android:layout_marginEnd="5dp"-->
-<!--            android:layout_width="120dp"-->
-<!--            android:layout_height="wrap_content"/>-->
-
         <ImageButton
             android:id="@+id/post_like"
-            android:layout_width="120dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:src="@drawable/like_disable"
             android:layout_marginStart="5dp"
@@ -191,7 +184,8 @@
         <ImageButton
             android:id="@+id/post_not_like"
             android:visibility="gone"
-            android:layout_width="120dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:src="@drawable/like_active"
             android:layout_marginStart="5dp"
@@ -202,7 +196,8 @@
 
         <ImageButton
             android:id="@+id/post_comment"
-            android:layout_width="120dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:src="@drawable/comment"
             android:layout_marginStart="5dp"
@@ -213,8 +208,10 @@
 
         <ImageButton
             android:id="@+id/post_save"
+            android:visibility="visible"
             android:background="#F0FDFD"
-            android:layout_width="120dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:src="@drawable/save"
             android:layout_marginStart="5dp"

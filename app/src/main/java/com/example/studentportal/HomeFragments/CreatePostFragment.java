@@ -31,10 +31,12 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.studentportal.Config;
+import com.example.studentportal.HomeActivity;
 import com.example.studentportal.R;
 import com.example.studentportal.modelClasses.PostModelClass;
 import com.example.studentportal.modelClasses.UserPostModel;
 import com.example.studentportal.utils.SpManager;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -106,49 +108,45 @@ public class CreatePostFragment extends Fragment {
             Glide.with(this).load(firebaseUser.getPhotoUrl()).into(creatorImg);
         }
 
-        addImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                chooseImageFromGallery();
+        addImg.setOnClickListener(view12 -> chooseImageFromGallery());
+
+        removeImg.setOnClickListener(view1 -> {
+            if(bitmap != null){
+                bitmap = null;
+                postImg.setImageBitmap(bitmap);
+                postImg.setVisibility(View.INVISIBLE);
+            }
+            else{
+                Toast.makeText(getActivity(), "No Image to Remove", Toast.LENGTH_SHORT).show();
             }
         });
 
-        removeImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(bitmap != null){
-                    bitmap = null;
-                    postImg.setImageBitmap(bitmap);
-                    postImg.setVisibility(View.INVISIBLE);
-                }
-                else{
-                    Toast.makeText(getActivity(), "No Image to Remove", Toast.LENGTH_SHORT).show();
-                }
+        postButton.setOnClickListener(view13 -> {
+
+            progressBar.setVisibility(View.VISIBLE);
+            strPost = postEditText.getText().toString().trim();
+
+            if(!strPost.isEmpty() || bitmap != null){
+                PostModelClass model = new PostModelClass(
+                        strPost,
+                        userId,
+                        postDateTime,
+                        imageUrl
+                );
+
+            if(bitmap != null){
+                uploadImageToFirestore(bitmap,model);
             }
-        });
-
-        postButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                progressBar.setVisibility(View.VISIBLE);
-                strPost = postEditText.getText().toString().trim();
-
-                if(!strPost.isEmpty() || bitmap != null){
-                    PostModelClass model = new PostModelClass(
-                            strPost,
-                            userId,
-                            postDateTime,
-                            imageUrl
-                    );
-
-                if(bitmap != null){
-                    uploadImageToFirestore(bitmap,model);
-                }
-                else {
-                    createPostModel(model);
-                    databaseReference.child(Config.USER_POSTS).child(postModel.getId()).setValue(postModel);
-                }
+            else {
+                createPostModel(model);
+                databaseReference.child(Config.USER_POSTS).child(postModel.getId()).setValue(postModel)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                progressBar.setVisibility(View.GONE);
+                                startActivity(new Intent(requireContext(), HomeActivity.class));
+                            }
+                        });
+            }
 
 //                storageReference.child(Config.StoragePostFolder).child(userId)
 //                        .child(postDateTime + ".jpeg")
@@ -190,11 +188,9 @@ public class CreatePostFragment extends Fragment {
 //
 //                        }
 //                    });
-                } else {
-                    Toast.makeText(getActivity(), "Write Something or Add Image to Post!", Toast.LENGTH_SHORT).show();
-                    progressBar.setVisibility(View.GONE);
-                }
-
+            } else {
+                Toast.makeText(getActivity(), "Write Something or Add Image to Post!", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
             }
 
         });
@@ -267,30 +263,25 @@ public class CreatePostFragment extends Fragment {
                 .addOnSuccessListener(taskSnapshot -> {
                     Log.d("img_url", "onSuccess: ");
 
-                    reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            Log.d("img_url", "onSuccess: url: "+uri.toString());
-                            String url = uri.toString();
-                            imageUrl = url;
+                    reference.getDownloadUrl().addOnSuccessListener(uri -> {
+                        Log.d("img_url", "onSuccess: url: "+uri.toString());
+                        String url = uri.toString();
+                        imageUrl = url;
 
-                            createPostModel(model);
-                            databaseReference.child(Config.USER_POSTS).child(postModel.getId()).setValue(postModel);
+                        createPostModel(model);
+                        databaseReference.child(Config.USER_POSTS).child(postModel.getId()).setValue(postModel)
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        progressBar.setVisibility(View.GONE);
+                                        startActivity(new Intent(requireContext(), HomeActivity.class));
+                                    }
+                                });
 
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                            Log.d("img_url", "onFailure: "+exception.getLocalizedMessage());
-                        }
-                    });
+                    }).addOnFailureListener(exception ->
+                            Log.d("img_url", "onFailure: "+exception.getLocalizedMessage()));
 
-                }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                progressBar.setVisibility(View.VISIBLE);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
+                }).addOnProgressListener(snapshot ->
+                progressBar.setVisibility(View.VISIBLE)).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();

@@ -1,6 +1,8 @@
 package com.example.studentportal.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,12 +10,15 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.studentportal.ProfileActivity;
 import com.example.studentportal.R;
+import com.example.studentportal.ViewProfileActivity;
 import com.example.studentportal.modelClasses.UserPostModel;
 import com.example.studentportal.utils.SpManager;
 
@@ -52,10 +57,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
             holder.showPost.setText(item.getPost());
         }
 
+        if(!item.getUser_profile_img().equals("DNF"))
+            Glide.with(context).load(item.getUser_profile_img()).into(holder.image_creator);
+
 
         if (!item.getImage_url().equals("")) {
             holder.image_post.setVisibility(View.VISIBLE);
             Log.d("adapter_ss", "onBindViewHolder: image_url: "+item.getImage_url());
+
             Glide.with(context).load(item.getImage_url()).into(holder.image_post);
         }
         else {
@@ -81,6 +90,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
 
         if (item.getTotalLike() == null) holder.likeCount.setText("0");
         else holder.likeCount.setText(String.valueOf(item.getTotalLike()));
+
+        if (item.getUser_id().equals(SpManager.getString(context,SpManager.PREF_USER_ID))) {
+            holder.postSave.setVisibility(View.GONE);
+        } else holder.postSave.setVisibility(View.VISIBLE);
 
         clickEvents(holder,item,position);
     }
@@ -114,6 +127,41 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
         holder.deleteBtn.setOnClickListener(view -> {
             listener.onItemDelete(item.getId(),position);
         });
+
+        holder.postSave.setOnClickListener(view -> {
+            if (SpManager.getString(context,item.getId()).equals("DNF")){
+                SpManager.saveString(context,item.getId(),item.getId());
+                Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
+            }
+            else Toast.makeText(context, "Already Saved", Toast.LENGTH_SHORT).show();
+
+        });
+
+        holder.image_creator.setOnClickListener(view -> {
+
+            Intent intent;
+            if (!item.getUser_id().equals(SpManager.getString(context,SpManager.PREF_USER_ID)))
+                intent = new Intent(context, ViewProfileActivity.class);
+            else intent = new Intent(context, ProfileActivity.class);
+
+            Bundle b = new Bundle();
+            b.putString("USER_ID", item.getUser_id());
+            intent.putExtras(b);
+            context.startActivity(intent);
+        });
+
+        holder.name_creator.setOnClickListener(view -> {
+            Intent intent;
+            if (!item.getUser_id().equals(SpManager.getString(context,SpManager.PREF_USER_ID)))
+                intent = new Intent(context, ViewProfileActivity.class);
+            else intent = new Intent(context, ProfileActivity.class);
+
+            Bundle b = new Bundle();
+            b.putString("USER_ID", item.getUser_id());
+            intent.putExtras(b);
+            context.startActivity(intent);
+        });
+
     }
 
     @Override
@@ -125,7 +173,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
 
         TextView showPost, name_creator, batch_creator,likeCount;
         ImageView image_post, image_creator;
-        ImageButton deleteBtn,likePost,notLikePost,commentPost;
+        ImageButton deleteBtn,likePost,notLikePost,commentPost,postSave;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -139,6 +187,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
             likeCount = itemView.findViewById(R.id.like_count);
             notLikePost = itemView.findViewById(R.id.post_not_like);
             commentPost = itemView.findViewById(R.id.post_comment);
+            postSave = itemView.findViewById(R.id.post_save);
         }
     }
 

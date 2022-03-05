@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -132,6 +133,12 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             i = new Intent(this,MyPostActivity.class);
             startActivity(i);
         }
+
+        if(item.getItemId() == R.id.savePost_nev){
+            i = new Intent(this,SavedPostActivity.class);
+            startActivity(i);
+        }
+
         if(item.getItemId() == R.id.students_nev){
             i = new Intent(this,BatchesActivity.class);
             startActivity(i);

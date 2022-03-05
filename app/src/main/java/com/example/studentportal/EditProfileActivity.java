@@ -28,6 +28,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.studentportal.utils.SpManager;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -275,6 +276,8 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Uri uri) {
                 setUserProfileUri(uri);
+                String profile_img_url = uri.toString();
+                SpManager.saveString(EditProfileActivity.this, SpManager.PREF_USER_PROFILE_IMAGE, profile_img_url);
             }
         });
     }

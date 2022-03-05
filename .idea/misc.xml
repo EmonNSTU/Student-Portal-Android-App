@@ -59,7 +59,11 @@
         <entry key="..\:/projects/Student-Portal-Android-App/app/src/main/res/drawable/ic_baseline_like.xml" value="0.2" />
         <entry key="..\:/projects/Student-Portal-Android-App/app/src/main/res/drawable/like_active.xml" value="0.2" />
         <entry key="..\:/projects/Student-Portal-Android-App/app/src/main/res/drawable/like_selector.xml" value="0.2" />
+        <entry key="..\:/projects/Student-Portal-Android-App/app/src/main/res/layout/activity_my_post.xml" value="0.15462962962962962" />
+        <entry key="..\:/projects/Student-Portal-Android-App/app/src/main/res/layout/activity_saved_post.xml" value="0.21875" />
+        <entry key="..\:/projects/Student-Portal-Android-App/app/src/main/res/layout/fragment_create_post.xml" value="0.21875" />
         <entry key="..\:/projects/Student-Portal-Android-App/app/src/main/res/layout/post_design.xml" value="0.33" />
+        <entry key="..\:/projects/Student-Portal-Android-App/app/src/main/res/menu/navegation_menu_layout.xml" value="0.33" />
       </map>
     </option>
   </component>

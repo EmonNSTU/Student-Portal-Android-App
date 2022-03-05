@@ -21,6 +21,11 @@
             android:icon="@drawable/ic_baseline_post"/>
 
         <item
+            android:id="@+id/savePost_nev"
+            android:title="Saved Posts"
+            android:icon="@drawable/save"/>
+
+        <item
             android:id="@+id/students_nev"
             android:title="Students"
             android:icon="@drawable/ic_baseline_engineering_24"/>
