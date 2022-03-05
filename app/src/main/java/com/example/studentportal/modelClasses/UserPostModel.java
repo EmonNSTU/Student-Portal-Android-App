@@ -1,5 +1,7 @@
 package com.example.studentportal.modelClasses;
 
+import java.util.ArrayList;
+
 public class UserPostModel {
     String batch; //local
     String created_at;
@@ -9,10 +11,28 @@ public class UserPostModel {
     String user_id; // local
     String user_name; // local
     String user_profile_img; // local
-    UserLike like;
-    UserComment comment;
+    Boolean liked;
+    Long totalLike;
+    ArrayList<UserLike> likeList;
+    ArrayList<UserComment> commentList;
 
     public UserPostModel() {}
+
+    public Boolean isLiked() {
+        return liked;
+    }
+
+    public void setLiked(Boolean liked) {
+        this.liked = liked;
+    }
+
+    public Long getTotalLike() {
+        return totalLike;
+    }
+
+    public void setTotalLike(Long totalLike) {
+        this.totalLike = totalLike;
+    }
 
     public String getBatch() {
         return batch;
@@ -78,25 +98,25 @@ public class UserPostModel {
         this.user_profile_img = user_profile_img;
     }
 
-    public UserLike getLike() {
-        return like;
+    public ArrayList<UserLike> getLikeList() {
+        return likeList;
     }
 
-    public void setLike(UserLike like) {
-        this.like = like;
+    public void setLikeList(ArrayList<UserLike> likeList) {
+        this.likeList = likeList;
     }
 
-    public UserComment getComment() {
-        return comment;
+    public ArrayList<UserComment> getCommentList() {
+        return commentList;
     }
 
-    public void setComment(UserComment comment) {
-        this.comment = comment;
+    public void setCommentList(ArrayList<UserComment> commentList) {
+        this.commentList = commentList;
     }
 
-    class UserLike {
-        String status;
-        String user_id;
+    public static class UserLike {
+        public String status;
+        public String user_id;
 
         public UserLike(){}
 
@@ -122,10 +142,10 @@ public class UserPostModel {
         }
     }
 
-    class UserComment {
-        String comment_text;
-        String created_at;
-        String user_id;
+    public static class UserComment {
+        public String comment_text;
+        public String created_at;
+        public String user_id;
 
         public UserComment() {}
 
