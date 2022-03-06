@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StudentPortal">
         <activity
+            android:name=".ResetLoginEmailActivity"
+            android:exported="false" />
+        <activity
             android:name=".SavedPostActivity"
             android:exported="true" />
         <activity

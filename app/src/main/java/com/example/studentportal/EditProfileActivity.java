@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -18,6 +19,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -372,5 +376,35 @@ public class EditProfileActivity extends AppCompatActivity {
 
         return rotate;
     }
+    //menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.reset_login_info_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Intent i;
+        if(item.getItemId() == R.id.menu_reset_mail){
+            i = new Intent(this, ResetLoginEmailActivity.class);
+            startActivity(i);
+        }
+        if(item.getItemId() == R.id.menu_reset_pass){
+            firebaseAuth.sendPasswordResetEmail(firebaseUser.getEmail()).addOnSuccessListener(unused -> {
+                Toast.makeText(EditProfileActivity.this,
+                        "A Link is sent to your Email to Reset the Password", Toast.LENGTH_SHORT).show();
+
+            }).addOnFailureListener(e -> {
+                Toast.makeText(EditProfileActivity.this,
+                        "Reset Link Can't be Sent due to "
+                        + e.getMessage(), Toast.LENGTH_SHORT).show();
+
+            });
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
 }
