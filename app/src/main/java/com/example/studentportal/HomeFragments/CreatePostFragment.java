@@ -36,19 +36,14 @@ import com.example.studentportal.R;
 import com.example.studentportal.modelClasses.PostModelClass;
 import com.example.studentportal.modelClasses.UserPostModel;
 import com.example.studentportal.utils.SpManager;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -134,61 +129,22 @@ public class CreatePostFragment extends Fragment {
                         imageUrl
                 );
 
-            if(bitmap != null){
-                uploadImageToFirestore(bitmap,model);
+                if(bitmap != null){
+                    uploadImageToFirestore(bitmap,model);
+                }
+                else {
+                    createPostModel(model);
+                    databaseReference.child(Config.USER_POSTS).child(postModel.getId()).setValue(postModel)
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    progressBar.setVisibility(View.GONE);
+                                    startActivity(new Intent(requireContext(), HomeActivity.class));
+                                }
+                            });
+                }
+
             }
             else {
-                createPostModel(model);
-                databaseReference.child(Config.USER_POSTS).child(postModel.getId()).setValue(postModel)
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                progressBar.setVisibility(View.GONE);
-                                startActivity(new Intent(requireContext(), HomeActivity.class));
-                            }
-                        });
-            }
-
-//                storageReference.child(Config.StoragePostFolder).child(userId)
-//                        .child(postDateTime + ".jpeg")
-//                        .getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                    @Override
-//                    public void onSuccess(Uri uri) {
-//                        imageUri = uri;
-//                        imageUrl = imageUri.toString();
-//                    }
-//                }).addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
-//                    }
-//                });
-
-
-
-//                    databaseReference.child("Post Data")
-//                            .child(userId)
-//                            .child(postDateTime).setValue(model).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<Void> task) {
-//                            if (task.isSuccessful()){
-//                                postEditText.setText("");
-//                                postImg.setImageBitmap(null);
-//                                postImg.setVisibility(View.GONE);
-//                                Toast.makeText(getActivity(), "Post Created Successfully", Toast.LENGTH_LONG).show();
-//                                progressBar.setVisibility(View.GONE);
-//                                startActivity(new Intent(getActivity(), HomeActivity.class));
-//                            }
-//                        }
-//                    }).addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception e) {
-//
-//                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
-//                            progressBar.setVisibility(View.GONE);
-//
-//                        }
-//                    });
-            } else {
                 Toast.makeText(getActivity(), "Write Something or Add Image to Post!", Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.GONE);
             }
@@ -288,14 +244,6 @@ public class CreatePostFragment extends Fragment {
             }
         });
 
-//        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//            @Override
-//            public void onSuccess(Uri uri) {
-//                Toast.makeText(getActivity(), "Inside imageUrl assign part", Toast.LENGTH_SHORT).show();
-//                Uri imgUri = uri;
-//                imageUrl = imgUri.toString();
-//            }
-//        });
     }
 
     public static Bitmap rotateImage(Context context, Uri uri, int orientation) throws IOException {

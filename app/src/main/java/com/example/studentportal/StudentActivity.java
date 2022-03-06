@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class StudentActivity extends AppCompatActivity implements StudentAdapter.ItemClickListener {
 
@@ -49,6 +51,7 @@ public class StudentActivity extends AppCompatActivity implements StudentAdapter
         initRecyclerView();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void initRecyclerView() {
 
         recyclerView = findViewById(R.id.student_recyclerView);
@@ -70,27 +73,25 @@ public class StudentActivity extends AppCompatActivity implements StudentAdapter
         getStudents();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void getStudents() {
 
         Bundle b = getIntent().getExtras();
-        String user = null;
+        String user;
         if(b != null){
             user = b.getString(Config.fireBatch);
 
-            int batch = Integer.valueOf(user);
+            int batch = Integer.parseInt(user);
             fireStore.collection(Config.fireFolder).whereEqualTo(Config.fireBatch, batch)
                     .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            for (QueryDocumentSnapshot document: task.getResult()) {
-                                String name = document.getString(Config.fireName);
-                                String roll = document.getString(Config.fireRoll);
-                                String userId = document.getId();
-                                StudentModelClass model = new StudentModelClass(name, roll, userId);
-                                studentList.add(model);
-                                studentAdapter.notifyDataSetChanged();
-                            }
+                    .addOnCompleteListener(task -> {
+                        for (QueryDocumentSnapshot document: Objects.requireNonNull(task.getResult())) {
+                            String name = document.getString(Config.fireName);
+                            String roll = document.getString(Config.fireRoll);
+                            String userId = document.getId();
+                            StudentModelClass model = new StudentModelClass(name, roll, userId);
+                            studentList.add(model);
+                            studentAdapter.notifyDataSetChanged();
                         }
                     });
 

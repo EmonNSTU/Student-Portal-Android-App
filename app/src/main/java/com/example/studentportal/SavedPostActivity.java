@@ -86,14 +86,12 @@ public class SavedPostActivity extends AppCompatActivity implements PostAdapter.
 
                     if (!SpManager.getString(SavedPostActivity.this,item.getId()).equals("DNF")){
                         if (snp.child("like").exists()) {
-                            Log.d(TAG, "onDataChange: like exist");
+
                             long totalLike = 0;
                             for (DataSnapshot snpLike: snp.child("like").getChildren()) {
                                 totalLike += snpLike.getChildrenCount();
                                 String userId = snpLike.child("user_id").getValue().toString();
-                                Log.d(TAG, "onDataChange: userId: "+userId);
                                 if (userId.equals(SpManager.getString(SavedPostActivity.this,SpManager.PREF_USER_ID))) {
-                                    Log.d(TAG, "onDataChange: is found");
                                     item.setLiked(true);
                                 }
                             }
@@ -164,6 +162,7 @@ public class SavedPostActivity extends AppCompatActivity implements PostAdapter.
                             storeLikeData(item.getId());
                         }
                     }
+
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
