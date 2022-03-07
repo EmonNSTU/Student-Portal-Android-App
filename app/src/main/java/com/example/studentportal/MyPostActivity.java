@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -15,12 +14,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.studentportal.HomeFragments.ShowPostFragment;
 import com.example.studentportal.adapter.MyPostAdapter;
 import com.example.studentportal.adapter.PostAdapter;
-import com.example.studentportal.adapter.ShowPostAdapter;
 import com.example.studentportal.modelClasses.PostModelClass;
 import com.example.studentportal.modelClasses.UserPostModel;
+import com.example.studentportal.utils.Config;
 import com.example.studentportal.utils.SpManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

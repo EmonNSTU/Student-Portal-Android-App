@@ -15,14 +15,12 @@ import android.view.MenuItem;
 
 import com.example.studentportal.adapter.StudentAdapter;
 import com.example.studentportal.modelClasses.StudentModelClass;
+import com.example.studentportal.utils.Config;
 import com.example.studentportal.utils.SpManager;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;

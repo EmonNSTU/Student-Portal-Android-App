@@ -30,7 +30,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
-import com.example.studentportal.Config;
+import com.example.studentportal.utils.Config;
 import com.example.studentportal.HomeActivity;
 import com.example.studentportal.R;
 import com.example.studentportal.modelClasses.PostModelClass;

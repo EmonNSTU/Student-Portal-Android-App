@@ -1,6 +1,5 @@
 package com.example.studentportal;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -13,10 +12,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.studentportal.utils.Config;
 import com.example.studentportal.utils.SpManager;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -43,12 +40,12 @@ public class SignupActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("User Registration");
 
         vfyEmail = findViewById(R.id.verify_mail);
-        regBtn = (Button) findViewById(R.id.register_bn);
+        regBtn = findViewById(R.id.register_bn);
         vfyName = findViewById(R.id.reg_name);
         vfyRetry = findViewById(R.id.verify_retry);
         vfyPass = findViewById(R.id.verify_setPass);
         vfyRePass = findViewById(R.id.verify_confirmPass);
-        progressBar = (ProgressBar) findViewById(R.id.verify_progressBar);
+        progressBar = findViewById(R.id.verify_progressBar);
         vfyBatch = findViewById(R.id.reg_batch);
         regRoll = findViewById(R.id.sign_id);
 
@@ -67,6 +64,9 @@ public class SignupActivity extends AppCompatActivity {
                 String batch = vfyBatch.getText().toString().trim();
                 String roll = regRoll.getText().toString().toUpperCase().trim();
 
+                String deptCheck = roll.substring(5,7);
+                //Log.d("TAG", "onClick: "+ deptCheck);
+
                 if(name.isEmpty()){
                     vfyName.setError("Name is Required!");
                     return;
@@ -84,6 +84,11 @@ public class SignupActivity extends AppCompatActivity {
 
                 if(roll.isEmpty()){
                     regRoll.setError("Student ID is Required!");
+                    return;
+                } else regRoll.setError(null);
+
+                if(!deptCheck.equals(Config.deptCode)){
+                    regRoll.setError("Invalid Student ID!");
                     return;
                 } else regRoll.setError(null);
 
@@ -106,90 +111,70 @@ public class SignupActivity extends AppCompatActivity {
 
                 progressBar.setVisibility(View.VISIBLE);
 
-                auth.createUserWithEmailAndPassword(mail,pass).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                    @Override
-                    public void onSuccess(AuthResult authResult) {
-                        SpManager.saveString(SignupActivity.this,SpManager.PREF_BATCH,batch);
-                        regBtn.setEnabled(false);
-                        userId = auth.getUid();
-                        Map<String ,Object> user = new HashMap<>();
-                        user.put(Config.fireMail, mail);
-                        user.put(Config.fireName, name);
-                        user.put(Config.fireBatch, intBatch);
-                        user.put(Config.fireRoll, roll);
-                        user.put(Config.fireGender, Config.fireNone);
-                        user.put(Config.fireBlood, Config.fireNone);
-                        user.put(Config.firePhone, Config.fireNone);
-                        user.put(Config.fireOccupation, Config.fireNone);
-                        user.put(Config.fireVerify, false);
+                auth.createUserWithEmailAndPassword(mail,pass).addOnSuccessListener(authResult -> {
+                    SpManager.saveString(SignupActivity.this,SpManager.PREF_BATCH,batch);
+                    regBtn.setEnabled(false);
+                    userId = auth.getUid();
+                    Map<String ,Object> user = new HashMap<>();
+                    user.put(Config.fireMail, mail);
+                    user.put(Config.fireName, name);
+                    user.put(Config.fireBatch, intBatch);
+                    user.put(Config.fireRoll, roll);
+                    user.put(Config.fireGender, Config.fireNone);
+                    user.put(Config.fireBlood, Config.fireNone);
+                    user.put(Config.firePhone, Config.fireNone);
+                    user.put(Config.fireOccupation, Config.fireNone);
+                    user.put(Config.fireVerify, false);
 
-                        firestore.collection(Config.fireFolder).document(userId).set(user);
+                    firestore.collection(Config.fireFolder).document(userId).set(user);
 
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putBoolean(Config.LOGIN_STATUS,false);
-                        editor.apply();
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean(Config.LOGIN_STATUS,false);
+                    editor.apply();
 
-                        auth.getCurrentUser().sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Toast.makeText(SignupActivity.this, "Verification Email Successfully Sent!", Toast.LENGTH_SHORT).show();
-                                try {
-                                    Toast.makeText(SignupActivity.this, "Verify your Email to Continue...", Toast.LENGTH_SHORT).show();
-                                    Thread.sleep(1000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                auth.signInWithEmailAndPassword(mail, pass);
-                                startActivity(new Intent(SignupActivity.this, EmailVerifyActivity.class));
-                                finish();
-                                progressBar.setVisibility(View.INVISIBLE);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                vfyRetry.setVisibility(View.VISIBLE);
-                            }
-                        });
-
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                        Toast.makeText(SignupActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                        progressBar.setVisibility(View.INVISIBLE);
-                    }
-                });
-
-            }
-        });
-
-        vfyRetry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                auth.getCurrentUser().sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Toast.makeText(getApplicationContext(), "Verification Email Successfully Sent!", Toast.LENGTH_SHORT).show();
-                        vfyRetry.setVisibility(View.INVISIBLE);
+                    auth.getCurrentUser().sendEmailVerification().addOnSuccessListener(unused -> {
+                        Toast.makeText(SignupActivity.this, "Verification Email Successfully Sent!", Toast.LENGTH_SHORT).show();
                         try {
-                            Toast.makeText(SignupActivity.this, "Verify your Email before Login", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignupActivity.this, "Verify your Email to Continue...", Toast.LENGTH_SHORT).show();
                             Thread.sleep(1000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        startActivity(new Intent(SignupActivity.this, LoginActivity.class));
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
+                        auth.signInWithEmailAndPassword(mail, pass);
+                        startActivity(new Intent(SignupActivity.this, EmailVerifyActivity.class));
+                        finish();
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }).addOnFailureListener(e -> {
                         Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         vfyRetry.setVisibility(View.VISIBLE);
-                    }
+                    });
+
+                }).addOnFailureListener(e -> {
+
+                    Toast.makeText(SignupActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.INVISIBLE);
                 });
+
             }
         });
+
+        vfyRetry.setOnClickListener(view ->
+                auth.getCurrentUser().sendEmailVerification().addOnSuccessListener(unused -> {
+                    Toast.makeText(getApplicationContext(), "Verification Email Successfully Sent!",
+                            Toast.LENGTH_SHORT).show();
+                    vfyRetry.setVisibility(View.INVISIBLE);
+                    try {
+                        Toast.makeText(SignupActivity.this, "Verify your Email before Login",
+                                Toast.LENGTH_SHORT).show();
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    startActivity(new Intent(SignupActivity.this, LoginActivity.class));
+                }).addOnFailureListener(e -> {
+                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    vfyRetry.setVisibility(View.VISIBLE);
+                }));
 
     }
 }

@@ -1,4 +1,4 @@
-package com.example.studentportal;
+package com.example.studentportal.utils;
 
 public class Config {
     public static final String SHARED_PREF = "Email_verification";
@@ -17,6 +17,7 @@ public class Config {
     public static final String StorageProfileFolder = "Profile Pictures";
     public static final String StoragePostFolder = "Post Pictures";
     public static final String fireProfileImageUrl = "profile_image_url";
+    public static final String deptCode = "11";
 
     // post
     public static final String USER_POSTS = "UserPosts";

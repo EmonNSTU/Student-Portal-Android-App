@@ -1,10 +1,8 @@
 package com.example.studentportal.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.studentportal.Config;
-import com.example.studentportal.ProfileActivity;
+import com.example.studentportal.utils.Config;
 import com.example.studentportal.R;
-import com.example.studentportal.ViewProfileActivity;
 import com.example.studentportal.modelClasses.PostModelClass;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;

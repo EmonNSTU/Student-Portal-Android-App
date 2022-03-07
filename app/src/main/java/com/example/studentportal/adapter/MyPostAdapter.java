@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.studentportal.Config;
+import com.example.studentportal.utils.Config;
 import com.example.studentportal.R;
 import com.example.studentportal.modelClasses.PostModelClass;
 import com.google.android.gms.tasks.OnSuccessListener;

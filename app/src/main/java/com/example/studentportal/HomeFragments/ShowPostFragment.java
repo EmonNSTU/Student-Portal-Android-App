@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.studentportal.Config;
+import com.example.studentportal.utils.Config;
 import com.example.studentportal.ProfileActivity;
 import com.example.studentportal.R;
 import com.example.studentportal.adapter.PostAdapter;
@@ -26,8 +26,6 @@ import com.example.studentportal.adapter.ShowPostAdapter;
 import com.example.studentportal.modelClasses.PostModelClass;
 import com.example.studentportal.modelClasses.UserPostModel;
 import com.example.studentportal.utils.SpManager;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -40,7 +38,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
 public class ShowPostFragment extends Fragment implements PostAdapter.OnItemClickListener {
 
