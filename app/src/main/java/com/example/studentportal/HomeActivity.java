@@ -105,7 +105,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                     SpManager.saveString(HomeActivity.this,SpManager.PREF_BATCH,String.valueOf(batch));
                     SpManager.saveString(HomeActivity.this,SpManager.PREF_USER_ID,userId);
                     SpManager.saveString(HomeActivity.this,SpManager.PREF_USER_NAME,userName);
-                    //SpManager.saveString(HomeActivity.this,SpManager.PREF_USER_PROFILE_IMAGE,userProfileImageUrl);
+                    SpManager.saveString(HomeActivity.this,SpManager.PREF_USER_PROFILE_IMAGE,userProfileImageUrl);
                 });
     }
 

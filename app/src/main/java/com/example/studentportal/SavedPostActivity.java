@@ -53,6 +53,7 @@ public class SavedPostActivity extends AppCompatActivity implements PostAdapter.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saved_post);
+        getSupportActionBar().setTitle("Saved Post");
 
         firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();

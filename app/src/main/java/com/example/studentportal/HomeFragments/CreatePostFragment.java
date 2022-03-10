@@ -70,6 +70,7 @@ public class CreatePostFragment extends Fragment {
     private Bitmap bitmap = null;
     private Uri imageUri;
     private String imageUrl = "";
+    private String id;
 
     private UserPostModel postModel;
 
@@ -156,7 +157,8 @@ public class CreatePostFragment extends Fragment {
 
     private void createPostModel(PostModelClass model) {
         postModel = new UserPostModel();
-        String id = databaseReference.child(Config.USER_POSTS).push().getKey();
+
+        id = databaseReference.child(Config.USER_POSTS).push().getKey();
 
         postModel.setId(id);
         postModel.setBatch(SpManager.getString(requireContext(),SpManager.PREF_BATCH));
@@ -211,16 +213,16 @@ public class CreatePostFragment extends Fragment {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
 
+        id = databaseReference.child(Config.USER_POSTS).push().getKey();
+
         StorageReference reference = FirebaseStorage.getInstance().getReference()
                 .child(Config.StoragePostFolder)
-                .child(userId).child(postDateTime + ".jpeg");
+                .child(userId).child(id + ".jpeg");
 
         reference.putBytes(byteArrayOutputStream.toByteArray())
                 .addOnSuccessListener(taskSnapshot -> {
-                    Log.d("img_url", "onSuccess: ");
 
                     reference.getDownloadUrl().addOnSuccessListener(uri -> {
-                        Log.d("img_url", "onSuccess: url: "+uri.toString());
                         String url = uri.toString();
                         imageUrl = url;
 
@@ -237,12 +239,8 @@ public class CreatePostFragment extends Fragment {
                             Log.d("img_url", "onFailure: "+exception.getLocalizedMessage()));
 
                 }).addOnProgressListener(snapshot ->
-                progressBar.setVisibility(View.VISIBLE)).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+                progressBar.setVisibility(View.VISIBLE)).addOnFailureListener(e ->
+                Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show());
 
     }
 
@@ -307,8 +305,8 @@ public class CreatePostFragment extends Fragment {
                     break;
             }
 
-        } catch (Exception e) {
-            Log.d("TAG", e.getLocalizedMessage());
+        } catch (Exception ignored) {
+
         }
 
         return rotate;

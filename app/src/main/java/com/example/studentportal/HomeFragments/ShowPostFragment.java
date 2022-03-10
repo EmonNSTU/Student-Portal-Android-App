@@ -26,6 +26,10 @@ import com.example.studentportal.adapter.ShowPostAdapter;
 import com.example.studentportal.modelClasses.PostModelClass;
 import com.example.studentportal.modelClasses.UserPostModel;
 import com.example.studentportal.utils.SpManager;
+import com.google.android.gms.auth.api.signin.internal.Storage;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -35,6 +39,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +58,7 @@ public class ShowPostFragment extends Fragment implements PostAdapter.OnItemClic
     private FirebaseFirestore firestore;
     private FirebaseUser firebaseUser;
     private ImageView userImg;
+    private StorageReference storageReference;
 
     private ArrayList<UserPostModel> postList = new ArrayList<>();
     private PostAdapter adapter;
@@ -103,14 +110,11 @@ public class ShowPostFragment extends Fragment implements PostAdapter.OnItemClic
                     UserPostModel item = snp.getValue(UserPostModel.class);
 
                     if (snp.child("like").exists()) {
-                        Log.d(TAG, "onDataChange: like exist");
                         long totalLike = 0;
                         for (DataSnapshot snpLike: snp.child("like").getChildren()) {
                             totalLike += snpLike.getChildrenCount();
                             String userId = snpLike.child("user_id").getValue().toString();
-                            Log.d(TAG, "onDataChange: userId: "+userId);
                             if (userId.equals(SpManager.getString(requireContext(),SpManager.PREF_USER_ID))) {
-                                Log.d(TAG, "onDataChange: is found");
                                 item.setLiked(true);
                             }
                         }
@@ -214,7 +218,8 @@ public class ShowPostFragment extends Fragment implements PostAdapter.OnItemClic
     }
 
     private void deletePost(String id,int position) {
-        databaseReference.child(Config.USER_POSTS).child(id).removeValue()
+
+                databaseReference.child(Config.USER_POSTS).child(id).removeValue()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         postList.remove(position);
@@ -222,17 +227,23 @@ public class ShowPostFragment extends Fragment implements PostAdapter.OnItemClic
                         toast("Post is deleted");
                     }
                 });
+
+//        firebaseAuth = FirebaseAuth.getInstance();
+//
+//        storageReference = FirebaseStorage.getInstance().getReference();
+//        storageReference.child(Config.StoragePostFolder).child(firebaseAuth.getCurrentUser().getUid())
+//                .child(id + ".jpeg").delete()
+//                .addOnSuccessListener(unused ->
+//                Toast.makeText(getActivity(), "Image Deleted!", Toast.LENGTH_SHORT).show());
     }
 
     @Override
     public void onLikeClicked(UserPostModel item) {
-        Log.d(TAG, "onLikeClicked: ");
         listPost(item);
     }
 
     @Override
     public void onCommentClicked(UserPostModel item) {
-        Log.d(TAG, "onCommentClicked: ");
         commentPost(item);
     }
 
@@ -240,7 +251,6 @@ public class ShowPostFragment extends Fragment implements PostAdapter.OnItemClic
 
     @Override
     public void onItemDelete(String id,int position) {
-        Log.d(TAG, "onItemDelete: ");
         deletePost(id,position);
     }
 

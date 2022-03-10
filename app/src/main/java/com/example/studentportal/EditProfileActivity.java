@@ -281,6 +281,7 @@ public class EditProfileActivity extends AppCompatActivity {
             public void onSuccess(Uri uri) {
                 setUserProfileUri(uri);
                 String profile_img_url = uri.toString();
+                firestore.collection(Config.fireFolder).document(firebaseUser.getUid()).update(Config.fireProfileImageUrl, profile_img_url);
                 SpManager.saveString(EditProfileActivity.this, SpManager.PREF_USER_PROFILE_IMAGE, profile_img_url);
             }
         });

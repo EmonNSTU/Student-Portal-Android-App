@@ -131,7 +131,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
         holder.postSave.setOnClickListener(view -> {
             if (SpManager.getString(context,item.getId()).equals("DNF")){
                 SpManager.saveString(context,item.getId(),item.getId());
-                Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Post is Saved", Toast.LENGTH_SHORT).show();
             }
             else Toast.makeText(context, "Already Saved", Toast.LENGTH_SHORT).show();
 
