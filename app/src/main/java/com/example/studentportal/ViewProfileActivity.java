@@ -39,6 +39,7 @@ public class ViewProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_profile);
+        getSupportActionBar().setTitle("Student Profile");
 
         pr_image = findViewById(R.id.view_profile_image);
         pr_name = findViewById(R.id.view_profile_name);

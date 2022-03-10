@@ -10,10 +10,13 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.studentportal.utils.Config;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Locale;
+import java.util.Objects;
 
 public class ResetLoginEmailActivity extends AppCompatActivity {
 
@@ -22,6 +25,7 @@ public class ResetLoginEmailActivity extends AppCompatActivity {
     ProgressBar progressBar;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
+    private FirebaseFirestore firestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,7 @@ public class ResetLoginEmailActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
+        firestore = FirebaseFirestore.getInstance();
 
         updateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,13 +77,17 @@ public class ResetLoginEmailActivity extends AppCompatActivity {
                     return;
                 } else newMail.setError(null);
 
-                if(firebaseUser.getEmail().equals(oldEmail)){
+                if(Objects.equals(firebaseUser.getEmail(), oldEmail)){
                     firebaseAuth.signInWithEmailAndPassword(oldEmail,oldPassword).addOnSuccessListener(authResult -> {
 
                         firebaseUser.updateEmail(newEmail).addOnSuccessListener(unused -> {
 
                             Toast.makeText(ResetLoginEmailActivity.this, "Login Email Updated Successfully!"
                                     , Toast.LENGTH_SHORT).show();
+
+                            firestore.collection(Config.fireFolder)
+                                    .document(Objects.requireNonNull(firebaseAuth.getUid()))
+                                    .update(Config.fireMail, newEmail);
 
                             firebaseUser.sendEmailVerification().addOnSuccessListener(unused1 -> {
                                     Toast.makeText(ResetLoginEmailActivity.this,

@@ -65,8 +65,8 @@ public class SignupActivity extends AppCompatActivity {
             String roll = regRoll.getText().toString().toUpperCase().trim();
 
             String deptCheck = roll.substring(5,7);
-            Thread thread = new Thread(()-> isRollDuplicate(roll));
-            thread.start();
+//            Thread thread = new Thread(()-> isRollDuplicate(roll));
+//            thread.start();
 
             if(name.isEmpty()){
                 vfyName.setError("Name is Required!");
@@ -87,10 +87,11 @@ public class SignupActivity extends AppCompatActivity {
                 regRoll.setError("Student ID is Required!");
                 return;
             }
-            else if(b){
-                regRoll.setError("Student is Already Registered!");
-                return;
-            } else {
+//            else if(b){
+//                regRoll.setError("Student is Already Registered!");
+//                return;
+//            }
+            else {
                 Log.d("TAG", "onCreate: false");
                 regRoll.setError(null);
             }
@@ -186,17 +187,17 @@ public class SignupActivity extends AppCompatActivity {
 
     }
 
-    public synchronized void isRollDuplicate(String roll){
-
-        firestore.collection(Config.fireFolder).whereEqualTo(Config.fireRoll, roll)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if(task.isSuccessful()){
-                        if(task.getResult() != null){
-                            b = true;
-                            Log.d("TAG", "onCreate: true");
-                        }
-                    }
-                });
-    }
+//    public synchronized void isRollDuplicate(String roll){
+//
+//        firestore.collection(Config.fireFolder).whereEqualTo(Config.fireRoll, roll)
+//                .get()
+//                .addOnCompleteListener(task -> {
+//                    if(task.isSuccessful()){
+//                        if(task.getResult() != null){
+//                            b = true;
+//                            Log.d("TAG", "onCreate: true");
+//                        }
+//                    }
+//                });
+//    }
 }
