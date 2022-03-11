@@ -1,5 +1,6 @@
 package com.example.studentportal;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -15,8 +16,12 @@ import android.widget.Toast;
 
 import com.example.studentportal.utils.Config;
 import com.example.studentportal.utils.SpManager;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +36,14 @@ public class SignupActivity extends AppCompatActivity {
     FirebaseFirestore firestore;
     private String userId;
     SharedPreferences sharedPreferences;
-    boolean b = false;
+
+    String mail;
+    String pass;
+    String rePass;
+    String name;
+    String batch;
+    String roll;
+    private String deptCheck;
 
 
     @Override
@@ -57,113 +69,37 @@ public class SignupActivity extends AppCompatActivity {
 
         regBtn.setOnClickListener(view -> {
 
-            String mail = vfyEmail.getText().toString().toLowerCase().trim();
-            String pass = vfyPass.getText().toString().trim();
-            String rePass = vfyRePass.getText().toString().trim();
-            String name = vfyName.getText().toString().trim();
-            String batch = vfyBatch.getText().toString().trim();
-            String roll = regRoll.getText().toString().toUpperCase().trim();
+            mail   = vfyEmail.getText().toString().toLowerCase().trim();
+            pass   = vfyPass.getText().toString().trim();
+            rePass = vfyRePass.getText().toString().trim();
+            name    = vfyName.getText().toString().trim();
+            batch   = vfyBatch.getText().toString().trim();
+            roll    = regRoll.getText().toString().toUpperCase().trim();
 
-            String deptCheck = roll.substring(5,7);
-//            Thread thread = new Thread(()-> isRollDuplicate(roll));
-//            thread.start();
+            deptCheck = roll.substring(5,7);
 
-            if(name.isEmpty()){
-                vfyName.setError("Name is Required!");
-                return;
-            } else vfyName.setError(null);
+            if (isValidate()) {
 
-            if(mail.isEmpty()){
-                vfyEmail.setError("Email Address is Required!");
-                return;
-            } else vfyEmail.setError(null);
+                progressBar.setVisibility(View.VISIBLE);
+                Log.d("TAG", "onCreate: Else Block");
+                firestore.collection(Config.fireFolder).whereEqualTo(Config.fireRoll, roll)
+                        .get()
+                        .addOnCompleteListener(task -> {
+                            if(task.isSuccessful()){
+                                if (task.getResult().isEmpty()) {
+                                    Log.d("TAG", "onCreate:  not Duplicate");
+                                    regRoll.setError(null);
+                                    sendDataToDatabase();
+                                }
+                                else {
+                                    Log.d("TAG", "onCreate:  Duplicate");
+                                    regRoll.setError("Student already exists!");
+                                    progressBar.setVisibility(View.GONE);
+                                }
+                            }
+                        }).addOnFailureListener(e -> Log.d("TAG", "onCreate: failer: "+e.getLocalizedMessage()));
 
-            if(batch.isEmpty()){
-                vfyBatch.setError("Batch Number is Required!");
-                return;
-            } else vfyBatch.setError(null);
-
-            if(roll.isEmpty()){
-                regRoll.setError("Student ID is Required!");
-                return;
             }
-//            else if(b){
-//                regRoll.setError("Student is Already Registered!");
-//                return;
-//            }
-            else {
-                Log.d("TAG", "onCreate: false");
-                regRoll.setError(null);
-            }
-
-            if(!deptCheck.equals(Config.deptCode)){
-                regRoll.setError("Invalid Student ID!");
-                return;
-            } else regRoll.setError(null);
-
-            if(pass.isEmpty()){
-                vfyPass.setError("Enter A Password!");
-                return;
-            } else vfyPass.setError(null);
-
-            if(rePass.isEmpty()){
-                vfyRePass.setError("Confirm the Password!");
-                return;
-            } else{
-                if(!rePass.equals(pass)){
-                    vfyRePass.setError("Password doesn't match!");
-                    return;
-                }else vfyRePass.setError(null);
-            }
-
-            int intBatch = Integer.parseInt(batch);
-
-            progressBar.setVisibility(View.VISIBLE);
-
-            auth.createUserWithEmailAndPassword(mail,pass).addOnSuccessListener(authResult -> {
-                SpManager.saveString(SignupActivity.this,SpManager.PREF_BATCH,batch);
-                regBtn.setEnabled(false);
-                userId = auth.getUid();
-                Map<String ,Object> user = new HashMap<>();
-                user.put(Config.fireMail, mail);
-                user.put(Config.fireName, name);
-                user.put(Config.fireBatch, intBatch);
-                user.put(Config.fireRoll, roll);
-                user.put(Config.fireGender, Config.fireNone);
-                user.put(Config.fireBlood, Config.fireNone);
-                user.put(Config.firePhone, Config.fireNone);
-                user.put(Config.fireOccupation, Config.fireNone);
-                user.put(Config.fireVerify, false);
-                user.put(Config.fireProfileImageUrl, null);
-
-                firestore.collection(Config.fireFolder).document(userId).set(user);
-
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean(Config.LOGIN_STATUS,false);
-                editor.apply();
-
-                auth.getCurrentUser().sendEmailVerification().addOnSuccessListener(unused -> {
-                    Toast.makeText(SignupActivity.this, "Verification Email Successfully Sent!", Toast.LENGTH_SHORT).show();
-                    try {
-                        Toast.makeText(SignupActivity.this, "Verify your Email to Continue...", Toast.LENGTH_SHORT).show();
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    auth.signInWithEmailAndPassword(mail, pass);
-                    startActivity(new Intent(SignupActivity.this, EmailVerifyActivity.class));
-                    finish();
-                    progressBar.setVisibility(View.INVISIBLE);
-                }).addOnFailureListener(e -> {
-                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    vfyRetry.setVisibility(View.VISIBLE);
-                });
-
-            }).addOnFailureListener(e -> {
-
-                Toast.makeText(SignupActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                progressBar.setVisibility(View.INVISIBLE);
-            });
 
         });
 
@@ -187,17 +123,100 @@ public class SignupActivity extends AppCompatActivity {
 
     }
 
-//    public synchronized void isRollDuplicate(String roll){
-//
-//        firestore.collection(Config.fireFolder).whereEqualTo(Config.fireRoll, roll)
-//                .get()
-//                .addOnCompleteListener(task -> {
-//                    if(task.isSuccessful()){
-//                        if(task.getResult() != null){
-//                            b = true;
-//                            Log.d("TAG", "onCreate: true");
-//                        }
-//                    }
-//                });
-//    }
+    private void sendDataToDatabase() {
+        int intBatch = Integer.parseInt(batch);
+
+        auth.createUserWithEmailAndPassword(mail,pass).addOnSuccessListener(authResult -> {
+            SpManager.saveString(SignupActivity.this,SpManager.PREF_BATCH,batch);
+            regBtn.setEnabled(false);
+            userId = auth.getUid();
+            Map<String ,Object> user = new HashMap<>();
+            user.put(Config.fireMail, mail);
+            user.put(Config.fireName, name);
+            user.put(Config.fireBatch, intBatch);
+            user.put(Config.fireRoll, roll);
+            user.put(Config.fireGender, Config.fireNone);
+            user.put(Config.fireBlood, Config.fireNone);
+            user.put(Config.firePhone, Config.fireNone);
+            user.put(Config.fireOccupation, Config.fireNone);
+            user.put(Config.fireVerify, false);
+            user.put(Config.fireProfileImageUrl, null);
+
+            firestore.collection(Config.fireFolder).document(userId).set(user);
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(Config.LOGIN_STATUS,false);
+            editor.apply();
+
+            auth.getCurrentUser().sendEmailVerification().addOnSuccessListener(unused -> {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(SignupActivity.this, "Verification Email Successfully Sent!", Toast.LENGTH_SHORT).show();
+                try {
+                    Toast.makeText(SignupActivity.this, "Verify your Email to Continue...", Toast.LENGTH_SHORT).show();
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                auth.signInWithEmailAndPassword(mail, pass);
+                startActivity(new Intent(SignupActivity.this, EmailVerifyActivity.class));
+                finish();
+            }).addOnFailureListener(e -> {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                vfyRetry.setVisibility(View.VISIBLE);
+            });
+
+        }).addOnFailureListener(e -> {
+
+            Toast.makeText(SignupActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            progressBar.setVisibility(View.GONE);
+        });
+    }
+
+    private boolean isValidate() {
+
+        if(name.isEmpty()){
+            vfyName.setError("Name is Required!");
+            return false;
+        } else vfyName.setError(null);
+
+        if(mail.isEmpty()){
+            vfyEmail.setError("Email Address is Required!");
+            return false;
+        } else vfyEmail.setError(null);
+
+        if(batch.isEmpty()){
+            vfyBatch.setError("Batch Number is Required!");
+            return false;
+        } else vfyBatch.setError(null);
+
+        if(roll.isEmpty()){
+            regRoll.setError("Student ID is Required!");
+            return false;
+        } else regRoll.setError(null);
+
+        if(!deptCheck.equals(Config.deptCode) || roll.length() != 11){
+            regRoll.setError("Invalid Student ID!");
+            return false;
+        } else regRoll.setError(null);
+
+        if(pass.isEmpty()){
+            vfyPass.setError("Enter A Password!");
+            return false;
+        } else vfyPass.setError(null);
+
+        if(rePass.isEmpty()){
+            vfyRePass.setError("Confirm the Password!");
+            return false;
+        } else vfyRePass.setError(null);
+
+        if(!rePass.equals(pass)){
+            vfyRePass.setError("Password doesn't match!");
+            return false;
+        }else vfyRePass.setError(null);
+
+
+        return true;
+    }
+
 }
