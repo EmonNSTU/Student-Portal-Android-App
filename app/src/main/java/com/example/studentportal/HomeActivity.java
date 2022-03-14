@@ -28,7 +28,8 @@ import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.Objects;
 
-public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ShowPostFragment.onButtonClick {
+public class HomeActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener, ShowPostFragment.onButtonClick {
 
     androidx.drawerlayout.widget.DrawerLayout drawerLayout;
     ActionBarDrawerToggle toggle;
@@ -39,7 +40,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
-    SharedPreferences sharedPreferences;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseStorage firebaseStorage;
