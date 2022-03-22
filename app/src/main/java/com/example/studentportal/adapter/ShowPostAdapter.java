@@ -78,7 +78,11 @@ public class ShowPostAdapter extends RecyclerView.Adapter<ShowPostAdapter.ShowPo
             final File postFile = File.createTempFile(postID, "jpeg");
             profileImgReference.getFile(profileFile).addOnSuccessListener(taskSnapshot -> {
                 Bitmap bitmap = BitmapFactory.decodeFile(profileFile.getAbsolutePath());
-                holder.image_creator.setImageBitmap(bitmap);
+                if(bitmap != null){
+                    holder.image_creator.setVisibility(View.VISIBLE);
+                    holder.image_creator.setImageBitmap(bitmap);
+                }
+                else holder.image_creator.setVisibility(View.VISIBLE);
             });
             postImgReference.getFile(postFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
